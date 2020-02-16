@@ -3,10 +3,12 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1DD589643662EADDE72D703C /* Pods_DripNDash.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD6C3BA375F9FC1C786BD071 /* Pods_DripNDash.framework */; };
+		33589B483CD12845D4854C81 /* Pods_DripNDashTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C6AEF4CBF5285514D34DC234 /* Pods_DripNDashTests.framework */; };
 		7C4394EE23F6F8C700793064 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4394ED23F6F8C700793064 /* AppDelegate.swift */; };
 		7C4394F023F6F8C700793064 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4394EF23F6F8C700793064 /* ViewController.swift */; };
 		7C4394F323F6F8C700793064 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7C4394F123F6F8C700793064 /* Main.storyboard */; };
@@ -14,6 +16,20 @@
 		7C4394F823F6F8CB00793064 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7C4394F623F6F8CB00793064 /* LaunchScreen.storyboard */; };
 		7C43950323F6F8CC00793064 /* DripNDashTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C43950223F6F8CC00793064 /* DripNDashTests.swift */; };
 		7C43950E23F6F8CC00793064 /* DripNDashUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C43950D23F6F8CC00793064 /* DripNDashUITests.swift */; };
+		7C43951F23F6F91300793064 /* ContainerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C43951E23F6F91300793064 /* ContainerController.swift */; };
+		7C43952123F6F9E300793064 /* SignInController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C43952023F6F9E300793064 /* SignInController.swift */; };
+		7C43952323F6F9FF00793064 /* RegisterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C43952223F6F9FF00793064 /* RegisterController.swift */; };
+		7C43952723F6FA2D00793064 /* DasherHomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C43952623F6FA2D00793064 /* DasherHomeController.swift */; };
+		7C43952A23F6FD1600793064 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C43952923F6FD1600793064 /* Protocols.swift */; };
+		7C43952C23F75C1800793064 /* CustomerRegisterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C43952B23F75C1800793064 /* CustomerRegisterController.swift */; };
+		7C43953023F75C8800793064 /* DasherRegisterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C43952F23F75C8800793064 /* DasherRegisterController.swift */; };
+		7C43953423F86F3700793064 /* CustomerTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C43953323F86F3700793064 /* CustomerTabBarController.swift */; };
+		7C43953623F8719D00793064 /* CustomerHomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C43953523F8719D00793064 /* CustomerHomeController.swift */; };
+		7C43953823F871B100793064 /* CustomerSettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C43953723F871B100793064 /* CustomerSettingsController.swift */; };
+		7C43953A23F871C800793064 /* DasherTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C43953923F871C800793064 /* DasherTabBarController.swift */; };
+		7C43953E23F871E800793064 /* DasherSettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C43953D23F871E800793064 /* DasherSettingsController.swift */; };
+		7C43957323F891B900793064 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7C43957223F891B900793064 /* GoogleService-Info.plist */; };
+		B1254F75AE2863E773168E7C /* Pods_DripNDash_DripNDashUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED4FDA168C60E4B4F3D80C40 /* Pods_DripNDash_DripNDashUITests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,6 +50,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		08D073E247592B9EA3BEB204 /* Pods-DripNDashTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DripNDashTests.release.xcconfig"; path = "Target Support Files/Pods-DripNDashTests/Pods-DripNDashTests.release.xcconfig"; sourceTree = "<group>"; };
+		5ED186A2267D23ECEECF767B /* Pods-DripNDash.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DripNDash.release.xcconfig"; path = "Target Support Files/Pods-DripNDash/Pods-DripNDash.release.xcconfig"; sourceTree = "<group>"; };
+		7467562178FBED160DD05BC8 /* Pods-DripNDash-DripNDashUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DripNDash-DripNDashUITests.release.xcconfig"; path = "Target Support Files/Pods-DripNDash-DripNDashUITests/Pods-DripNDash-DripNDashUITests.release.xcconfig"; sourceTree = "<group>"; };
 		7C4394EA23F6F8C700793064 /* DripNDash.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DripNDash.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C4394ED23F6F8C700793064 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7C4394EF23F6F8C700793064 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -47,6 +66,25 @@
 		7C43950923F6F8CC00793064 /* DripNDashUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DripNDashUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C43950D23F6F8CC00793064 /* DripNDashUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DripNDashUITests.swift; sourceTree = "<group>"; };
 		7C43950F23F6F8CC00793064 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7C43951E23F6F91300793064 /* ContainerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerController.swift; sourceTree = "<group>"; };
+		7C43952023F6F9E300793064 /* SignInController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInController.swift; sourceTree = "<group>"; };
+		7C43952223F6F9FF00793064 /* RegisterController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterController.swift; sourceTree = "<group>"; };
+		7C43952623F6FA2D00793064 /* DasherHomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DasherHomeController.swift; sourceTree = "<group>"; };
+		7C43952923F6FD1600793064 /* Protocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
+		7C43952B23F75C1800793064 /* CustomerRegisterController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerRegisterController.swift; sourceTree = "<group>"; };
+		7C43952F23F75C8800793064 /* DasherRegisterController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DasherRegisterController.swift; sourceTree = "<group>"; };
+		7C43953323F86F3700793064 /* CustomerTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerTabBarController.swift; sourceTree = "<group>"; };
+		7C43953523F8719D00793064 /* CustomerHomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerHomeController.swift; sourceTree = "<group>"; };
+		7C43953723F871B100793064 /* CustomerSettingsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerSettingsController.swift; sourceTree = "<group>"; };
+		7C43953923F871C800793064 /* DasherTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DasherTabBarController.swift; sourceTree = "<group>"; };
+		7C43953D23F871E800793064 /* DasherSettingsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DasherSettingsController.swift; sourceTree = "<group>"; };
+		7C43957223F891B900793064 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
+		824FAC49C1BE652E0D4ECE9A /* Pods-DripNDash-DripNDashUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DripNDash-DripNDashUITests.debug.xcconfig"; path = "Target Support Files/Pods-DripNDash-DripNDashUITests/Pods-DripNDash-DripNDashUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		C6AEF4CBF5285514D34DC234 /* Pods_DripNDashTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DripNDashTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CD6C3BA375F9FC1C786BD071 /* Pods_DripNDash.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DripNDash.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E69AC7D67B26B26F8AD3373A /* Pods-DripNDashTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DripNDashTests.debug.xcconfig"; path = "Target Support Files/Pods-DripNDashTests/Pods-DripNDashTests.debug.xcconfig"; sourceTree = "<group>"; };
+		EC3DC5B54024E680C856BA32 /* Pods-DripNDash.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DripNDash.debug.xcconfig"; path = "Target Support Files/Pods-DripNDash/Pods-DripNDash.debug.xcconfig"; sourceTree = "<group>"; };
+		ED4FDA168C60E4B4F3D80C40 /* Pods_DripNDash_DripNDashUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DripNDash_DripNDashUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +92,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1DD589643662EADDE72D703C /* Pods_DripNDash.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -61,6 +100,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				33589B483CD12845D4854C81 /* Pods_DripNDashTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -68,12 +108,36 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B1254F75AE2863E773168E7C /* Pods_DripNDash_DripNDashUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3C6439529BF84B25F65CB70A /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				EC3DC5B54024E680C856BA32 /* Pods-DripNDash.debug.xcconfig */,
+				5ED186A2267D23ECEECF767B /* Pods-DripNDash.release.xcconfig */,
+				824FAC49C1BE652E0D4ECE9A /* Pods-DripNDash-DripNDashUITests.debug.xcconfig */,
+				7467562178FBED160DD05BC8 /* Pods-DripNDash-DripNDashUITests.release.xcconfig */,
+				E69AC7D67B26B26F8AD3373A /* Pods-DripNDashTests.debug.xcconfig */,
+				08D073E247592B9EA3BEB204 /* Pods-DripNDashTests.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		4AB3D81CDC55C76C45D1DD7E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				CD6C3BA375F9FC1C786BD071 /* Pods_DripNDash.framework */,
+				ED4FDA168C60E4B4F3D80C40 /* Pods_DripNDash_DripNDashUITests.framework */,
+				C6AEF4CBF5285514D34DC234 /* Pods_DripNDashTests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		7C4394E123F6F8C700793064 = {
 			isa = PBXGroup;
 			children = (
@@ -81,6 +145,8 @@
 				7C43950123F6F8CC00793064 /* DripNDashTests */,
 				7C43950C23F6F8CC00793064 /* DripNDashUITests */,
 				7C4394EB23F6F8C700793064 /* Products */,
+				3C6439529BF84B25F65CB70A /* Pods */,
+				4AB3D81CDC55C76C45D1DD7E /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -97,6 +163,11 @@
 		7C4394EC23F6F8C700793064 /* DripNDash */ = {
 			isa = PBXGroup;
 			children = (
+				7C43957223F891B900793064 /* GoogleService-Info.plist */,
+				7C43952823F6FD0900793064 /* Utils */,
+				7C43951D23F6F8F500793064 /* Controller */,
+				7C43951C23F6F8EC00793064 /* View */,
+				7C43951B23F6F8E000793064 /* Model */,
 				7C4394ED23F6F8C700793064 /* AppDelegate.swift */,
 				7C4394EF23F6F8C700793064 /* ViewController.swift */,
 				7C4394F123F6F8C700793064 /* Main.storyboard */,
@@ -125,6 +196,62 @@
 			path = DripNDashUITests;
 			sourceTree = "<group>";
 		};
+		7C43951B23F6F8E000793064 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		7C43951C23F6F8EC00793064 /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		7C43951D23F6F8F500793064 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				7C43953123F86EEB00793064 /* Customer */,
+				7C43953223F86F1500793064 /* Dasher */,
+				7C43951E23F6F91300793064 /* ContainerController.swift */,
+				7C43952023F6F9E300793064 /* SignInController.swift */,
+				7C43952223F6F9FF00793064 /* RegisterController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		7C43952823F6FD0900793064 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				7C43952923F6FD1600793064 /* Protocols.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		7C43953123F86EEB00793064 /* Customer */ = {
+			isa = PBXGroup;
+			children = (
+				7C43952B23F75C1800793064 /* CustomerRegisterController.swift */,
+				7C43953323F86F3700793064 /* CustomerTabBarController.swift */,
+				7C43953523F8719D00793064 /* CustomerHomeController.swift */,
+				7C43953723F871B100793064 /* CustomerSettingsController.swift */,
+			);
+			path = Customer;
+			sourceTree = "<group>";
+		};
+		7C43953223F86F1500793064 /* Dasher */ = {
+			isa = PBXGroup;
+			children = (
+				7C43952F23F75C8800793064 /* DasherRegisterController.swift */,
+				7C43953923F871C800793064 /* DasherTabBarController.swift */,
+				7C43952623F6FA2D00793064 /* DasherHomeController.swift */,
+				7C43953D23F871E800793064 /* DasherSettingsController.swift */,
+			);
+			path = Dasher;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -132,9 +259,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7C43951223F6F8CC00793064 /* Build configuration list for PBXNativeTarget "DripNDash" */;
 			buildPhases = (
+				44F878DACC4AC340580C2DA4 /* [CP] Check Pods Manifest.lock */,
 				7C4394E623F6F8C700793064 /* Sources */,
 				7C4394E723F6F8C700793064 /* Frameworks */,
 				7C4394E823F6F8C700793064 /* Resources */,
+				4B0AB603D3CE901646B4412A /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -149,6 +278,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7C43951523F6F8CC00793064 /* Build configuration list for PBXNativeTarget "DripNDashTests" */;
 			buildPhases = (
+				6948C3E04CC08FFDB241FD9C /* [CP] Check Pods Manifest.lock */,
 				7C4394FA23F6F8CC00793064 /* Sources */,
 				7C4394FB23F6F8CC00793064 /* Frameworks */,
 				7C4394FC23F6F8CC00793064 /* Resources */,
@@ -167,9 +297,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7C43951823F6F8CC00793064 /* Build configuration list for PBXNativeTarget "DripNDashUITests" */;
 			buildPhases = (
+				5042059E7BE126A332E06D83 /* [CP] Check Pods Manifest.lock */,
 				7C43950523F6F8CC00793064 /* Sources */,
 				7C43950623F6F8CC00793064 /* Frameworks */,
 				7C43950723F6F8CC00793064 /* Resources */,
+				790CA2DCFD70DE3302477F06 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -230,6 +362,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7C4394F823F6F8CB00793064 /* LaunchScreen.storyboard in Resources */,
+				7C43957323F891B900793064 /* GoogleService-Info.plist in Resources */,
 				7C4394F523F6F8CB00793064 /* Assets.xcassets in Resources */,
 				7C4394F323F6F8C700793064 /* Main.storyboard in Resources */,
 			);
@@ -251,13 +384,128 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		44F878DACC4AC340580C2DA4 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-DripNDash-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		4B0AB603D3CE901646B4412A /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-DripNDash/Pods-DripNDash-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-DripNDash/Pods-DripNDash-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-DripNDash/Pods-DripNDash-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		5042059E7BE126A332E06D83 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-DripNDash-DripNDashUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6948C3E04CC08FFDB241FD9C /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-DripNDashTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		790CA2DCFD70DE3302477F06 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-DripNDash-DripNDashUITests/Pods-DripNDash-DripNDashUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-DripNDash-DripNDashUITests/Pods-DripNDash-DripNDashUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-DripNDash-DripNDashUITests/Pods-DripNDash-DripNDashUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		7C4394E623F6F8C700793064 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7C43953A23F871C800793064 /* DasherTabBarController.swift in Sources */,
+				7C43952323F6F9FF00793064 /* RegisterController.swift in Sources */,
+				7C43953423F86F3700793064 /* CustomerTabBarController.swift in Sources */,
+				7C43953623F8719D00793064 /* CustomerHomeController.swift in Sources */,
+				7C43953E23F871E800793064 /* DasherSettingsController.swift in Sources */,
+				7C43953023F75C8800793064 /* DasherRegisterController.swift in Sources */,
 				7C4394F023F6F8C700793064 /* ViewController.swift in Sources */,
+				7C43952723F6FA2D00793064 /* DasherHomeController.swift in Sources */,
+				7C43953823F871B100793064 /* CustomerSettingsController.swift in Sources */,
+				7C43952C23F75C1800793064 /* CustomerRegisterController.swift in Sources */,
+				7C43952123F6F9E300793064 /* SignInController.swift in Sources */,
 				7C4394EE23F6F8C700793064 /* AppDelegate.swift in Sources */,
+				7C43951F23F6F91300793064 /* ContainerController.swift in Sources */,
+				7C43952A23F6FD1600793064 /* Protocols.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -430,6 +678,7 @@
 		};
 		7C43951323F6F8CC00793064 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = EC3DC5B54024E680C856BA32 /* Pods-DripNDash.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -448,6 +697,7 @@
 		};
 		7C43951423F6F8CC00793064 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5ED186A2267D23ECEECF767B /* Pods-DripNDash.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -466,6 +716,7 @@
 		};
 		7C43951623F6F8CC00793064 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E69AC7D67B26B26F8AD3373A /* Pods-DripNDashTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -487,6 +738,7 @@
 		};
 		7C43951723F6F8CC00793064 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 08D073E247592B9EA3BEB204 /* Pods-DripNDashTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -508,6 +760,7 @@
 		};
 		7C43951923F6F8CC00793064 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 824FAC49C1BE652E0D4ECE9A /* Pods-DripNDash-DripNDashUITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -528,6 +781,7 @@
 		};
 		7C43951A23F6F8CC00793064 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7467562178FBED160DD05BC8 /* Pods-DripNDash-DripNDashUITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>941051576385-hl8sc4j2dhv7m932fifb8hqcvcmeb5j9.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.941051576385-hl8sc4j2dhv7m932fifb8hqcvcmeb5j9</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAliUHH6QRrHkU0Dqk3bZXUkrCXa4iCIfM</string>
+	<key>GCM_SENDER_ID</key>
+	<string>941051576385</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>kingliam.DripNDash</string>
+	<key>PROJECT_ID</key>
+	<string>dripndash</string>
+	<key>STORAGE_BUCKET</key>
+	<string>dripndash.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:941051576385:ios:07691bc2b781c296e046c0</string>
+	<key>DATABASE_URL</key>
+	<string>https://dripndash.firebaseio.com</string>
+</dict>
+</plist>
