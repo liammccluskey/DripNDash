@@ -86,7 +86,6 @@ class CustomerRegisterController: UIViewController {
         registerButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
         registerButton.leftAnchor.constraint(equalTo: registrationView.leftAnchor, constant: 40).isActive = true
         registerButton.rightAnchor.constraint(equalTo: registrationView.rightAnchor, constant: -40).isActive = true
-        
     }
     
     // MARK: - Selectors

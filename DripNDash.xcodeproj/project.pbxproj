@@ -29,6 +29,8 @@
 		7C43953A23F871C800793064 /* DasherTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C43953923F871C800793064 /* DasherTabBarController.swift */; };
 		7C43953E23F871E800793064 /* DasherSettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C43953D23F871E800793064 /* DasherSettingsController.swift */; };
 		7C43957323F891B900793064 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7C43957223F891B900793064 /* GoogleService-Info.plist */; };
+		7CD240B623F9DBA300F9311A /* CustomerJobStatusController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CD240B523F9DBA300F9311A /* CustomerJobStatusController.swift */; };
+		7CD240B823F9DC5000F9311A /* CustomerJobHistoryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CD240B723F9DC5000F9311A /* CustomerJobHistoryController.swift */; };
 		B1254F75AE2863E773168E7C /* Pods_DripNDash_DripNDashUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED4FDA168C60E4B4F3D80C40 /* Pods_DripNDash_DripNDashUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -79,6 +81,8 @@
 		7C43953923F871C800793064 /* DasherTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DasherTabBarController.swift; sourceTree = "<group>"; };
 		7C43953D23F871E800793064 /* DasherSettingsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DasherSettingsController.swift; sourceTree = "<group>"; };
 		7C43957223F891B900793064 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
+		7CD240B523F9DBA300F9311A /* CustomerJobStatusController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerJobStatusController.swift; sourceTree = "<group>"; };
+		7CD240B723F9DC5000F9311A /* CustomerJobHistoryController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerJobHistoryController.swift; sourceTree = "<group>"; };
 		824FAC49C1BE652E0D4ECE9A /* Pods-DripNDash-DripNDashUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DripNDash-DripNDashUITests.debug.xcconfig"; path = "Target Support Files/Pods-DripNDash-DripNDashUITests/Pods-DripNDash-DripNDashUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		C6AEF4CBF5285514D34DC234 /* Pods_DripNDashTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DripNDashTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD6C3BA375F9FC1C786BD071 /* Pods_DripNDash.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DripNDash.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -237,6 +241,8 @@
 				7C43953323F86F3700793064 /* CustomerTabBarController.swift */,
 				7C43953523F8719D00793064 /* CustomerHomeController.swift */,
 				7C43953723F871B100793064 /* CustomerSettingsController.swift */,
+				7CD240B523F9DBA300F9311A /* CustomerJobStatusController.swift */,
+				7CD240B723F9DC5000F9311A /* CustomerJobHistoryController.swift */,
 			);
 			path = Customer;
 			sourceTree = "<group>";
@@ -492,8 +498,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7CD240B823F9DC5000F9311A /* CustomerJobHistoryController.swift in Sources */,
 				7C43953A23F871C800793064 /* DasherTabBarController.swift in Sources */,
 				7C43952323F6F9FF00793064 /* RegisterController.swift in Sources */,
+				7CD240B623F9DBA300F9311A /* CustomerJobStatusController.swift in Sources */,
 				7C43953423F86F3700793064 /* CustomerTabBarController.swift in Sources */,
 				7C43953623F8719D00793064 /* CustomerHomeController.swift in Sources */,
 				7C43953E23F871E800793064 /* DasherSettingsController.swift in Sources */,
