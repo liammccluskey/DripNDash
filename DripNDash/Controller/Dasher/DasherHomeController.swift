@@ -155,6 +155,17 @@ class DasherHomeController: UIViewController {
             jobRequestFirestore.getOldestJobRequest(availableToDasher: dasher)
         } else {
             print("DasherHomeController Error: dasher is nil")
+            let uid = Auth.auth().currentUser?.uid
+            let dasherTemp = Dasher(
+                uid: uid!,
+                firstName: "liam",
+                lastName: "mccluskey",
+                email: "dripndashDeveloper@gmail.com",
+                dorm: "quad",
+                dormRoom: 101,
+                completedJobs: []
+            )
+            jobRequestFirestore.getOldestJobRequest(availableToDasher: dasherTemp)
         }
     }
     
