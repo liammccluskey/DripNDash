@@ -22,7 +22,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.rootViewController = ContainerController()
         
         FirebaseApp.configure()
-        
         return true
     }
 

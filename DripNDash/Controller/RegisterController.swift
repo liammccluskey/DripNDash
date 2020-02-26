@@ -12,7 +12,7 @@ class RegisterController: UIViewController {
     
     // MARK: - Properties
     
-    var delegate: RegisterControllerDelegate?
+    var delegate: SignInControllerDelegate?
     
     let headerLabel: UILabel = {
         let label = UILabel()
@@ -156,11 +156,19 @@ class RegisterController: UIViewController {
     
     @objc func registerCustomerAction() {
         let controller = CustomerRegisterController()
+        controller.delegate = self
         navigationController?.pushViewController(controller, animated: true)
     }
     
     @objc func registerDasherAction() {
         let controller = DasherRegisterController()
+        controller.delegate = self
         navigationController?.pushViewController(controller, animated: true)
+    }
+}
+
+extension RegisterController: SignInControllerDelegate {
+    func userDidSignIn(userClass: String) {
+        delegate?.userDidSignIn(userClass: userClass)
     }
 }

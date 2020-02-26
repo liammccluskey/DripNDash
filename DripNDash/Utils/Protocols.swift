@@ -7,12 +7,22 @@
 //
 
 protocol SignInControllerDelegate {
-    func signIn(userClass: String)
-    func register()
+    func userDidSignIn(userClass: String)
 }
 
-protocol RegisterControllerDelegate {
-    func register(userClass: String)
+protocol CustomerJobsTableControllerDelegate {
+    func didSelectJob()
 }
 
+protocol CustomerFirestoreDelegate {
+    func sendCustomer(customer: Customer?)
+}
+
+protocol DasherFirestoreDelegate {
+    func sendDasher(dasher: Dasher?)
+}
+
+protocol JobRequestFirestoreDelegate {
+    func sendJobRequest(jobRequest: JobRequest)
+}
 

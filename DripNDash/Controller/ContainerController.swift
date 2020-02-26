@@ -35,17 +35,15 @@ class ContainerController: UIViewController {
         showChildViewController(child: controller)
     }
     
-    func configureHomeController(userClass: String) {
+    func configureTabBarController(userClass: String) {
         switch userClass {
         case "customer":
-            let controller = CustomerHomeController()
-            let embeddedController = UINavigationController(rootViewController: controller)
-            present(embeddedController, animated: true)
+            let controller = CustomerTabBarController()
+            showChildViewController(child: controller)
             break
         case "dasher":
-            let controller = DasherHomeController()
-            let embeddedController = UINavigationController(rootViewController: controller)
-            present(embeddedController, animated: true)
+            let controller = DasherTabBarController()
+            showChildViewController(child: controller)
             break
         default:
             break
@@ -62,20 +60,7 @@ class ContainerController: UIViewController {
 }
 
 extension ContainerController: SignInControllerDelegate {
-    func signIn(userClass: String) {
-        configureHomeController(userClass: userClass)
+    func userDidSignIn(userClass: String) {
+        configureTabBarController(userClass: userClass)
     }
-    func register() {
-        configureRegisterController()
-    }
-    
-    
-}
-
-extension ContainerController: RegisterControllerDelegate {
-    func register(userClass: String) {
-        configureHomeController(userClass: userClass)
-    }
-    
-    
 }

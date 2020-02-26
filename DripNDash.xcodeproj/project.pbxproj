@@ -9,6 +9,11 @@
 /* Begin PBXBuildFile section */
 		1DD589643662EADDE72D703C /* Pods_DripNDash.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD6C3BA375F9FC1C786BD071 /* Pods_DripNDash.framework */; };
 		33589B483CD12845D4854C81 /* Pods_DripNDashTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C6AEF4CBF5285514D34DC234 /* Pods_DripNDashTests.framework */; };
+		7C39566F23FDFBC600733E3F /* JobRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C39566E23FDFBC600733E3F /* JobRequest.swift */; };
+		7C39567223FEF6D800733E3F /* CustomerFirestore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C39567123FEF6D800733E3F /* CustomerFirestore.swift */; };
+		7C39567423FEFA7A00733E3F /* Customer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C39567323FEFA7A00733E3F /* Customer.swift */; };
+		7C39567823FF173B00733E3F /* DasherFirestore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C39567723FF173B00733E3F /* DasherFirestore.swift */; };
+		7C39567A23FF178F00733E3F /* Dasher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C39567923FF178F00733E3F /* Dasher.swift */; };
 		7C4394EE23F6F8C700793064 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4394ED23F6F8C700793064 /* AppDelegate.swift */; };
 		7C4394F023F6F8C700793064 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4394EF23F6F8C700793064 /* ViewController.swift */; };
 		7C4394F323F6F8C700793064 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7C4394F123F6F8C700793064 /* Main.storyboard */; };
@@ -29,8 +34,11 @@
 		7C43953A23F871C800793064 /* DasherTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C43953923F871C800793064 /* DasherTabBarController.swift */; };
 		7C43953E23F871E800793064 /* DasherSettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C43953D23F871E800793064 /* DasherSettingsController.swift */; };
 		7C43957323F891B900793064 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7C43957223F891B900793064 /* GoogleService-Info.plist */; };
+		7C549A452405C106009E9DE0 /* DasherJobsTableController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C549A442405C105009E9DE0 /* DasherJobsTableController.swift */; };
+		7C6264D424041316001C470C /* JobRequestFirestore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6264D324041316001C470C /* JobRequestFirestore.swift */; };
 		7CD240B623F9DBA300F9311A /* CustomerJobStatusController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CD240B523F9DBA300F9311A /* CustomerJobStatusController.swift */; };
 		7CD240B823F9DC5000F9311A /* CustomerJobHistoryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CD240B723F9DC5000F9311A /* CustomerJobHistoryController.swift */; };
+		7CD240BA23FC84C100F9311A /* CustomerJobsTableController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CD240B923FC84C100F9311A /* CustomerJobsTableController.swift */; };
 		B1254F75AE2863E773168E7C /* Pods_DripNDash_DripNDashUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED4FDA168C60E4B4F3D80C40 /* Pods_DripNDash_DripNDashUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -55,6 +63,11 @@
 		08D073E247592B9EA3BEB204 /* Pods-DripNDashTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DripNDashTests.release.xcconfig"; path = "Target Support Files/Pods-DripNDashTests/Pods-DripNDashTests.release.xcconfig"; sourceTree = "<group>"; };
 		5ED186A2267D23ECEECF767B /* Pods-DripNDash.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DripNDash.release.xcconfig"; path = "Target Support Files/Pods-DripNDash/Pods-DripNDash.release.xcconfig"; sourceTree = "<group>"; };
 		7467562178FBED160DD05BC8 /* Pods-DripNDash-DripNDashUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DripNDash-DripNDashUITests.release.xcconfig"; path = "Target Support Files/Pods-DripNDash-DripNDashUITests/Pods-DripNDash-DripNDashUITests.release.xcconfig"; sourceTree = "<group>"; };
+		7C39566E23FDFBC600733E3F /* JobRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobRequest.swift; sourceTree = "<group>"; };
+		7C39567123FEF6D800733E3F /* CustomerFirestore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerFirestore.swift; sourceTree = "<group>"; };
+		7C39567323FEFA7A00733E3F /* Customer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Customer.swift; sourceTree = "<group>"; };
+		7C39567723FF173B00733E3F /* DasherFirestore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DasherFirestore.swift; sourceTree = "<group>"; };
+		7C39567923FF178F00733E3F /* Dasher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dasher.swift; sourceTree = "<group>"; };
 		7C4394EA23F6F8C700793064 /* DripNDash.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DripNDash.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C4394ED23F6F8C700793064 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7C4394EF23F6F8C700793064 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -81,8 +94,11 @@
 		7C43953923F871C800793064 /* DasherTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DasherTabBarController.swift; sourceTree = "<group>"; };
 		7C43953D23F871E800793064 /* DasherSettingsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DasherSettingsController.swift; sourceTree = "<group>"; };
 		7C43957223F891B900793064 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
+		7C549A442405C105009E9DE0 /* DasherJobsTableController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DasherJobsTableController.swift; sourceTree = "<group>"; };
+		7C6264D324041316001C470C /* JobRequestFirestore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobRequestFirestore.swift; sourceTree = "<group>"; };
 		7CD240B523F9DBA300F9311A /* CustomerJobStatusController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerJobStatusController.swift; sourceTree = "<group>"; };
 		7CD240B723F9DC5000F9311A /* CustomerJobHistoryController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerJobHistoryController.swift; sourceTree = "<group>"; };
+		7CD240B923FC84C100F9311A /* CustomerJobsTableController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerJobsTableController.swift; sourceTree = "<group>"; };
 		824FAC49C1BE652E0D4ECE9A /* Pods-DripNDash-DripNDashUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DripNDash-DripNDashUITests.debug.xcconfig"; path = "Target Support Files/Pods-DripNDash-DripNDashUITests/Pods-DripNDash-DripNDashUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		C6AEF4CBF5285514D34DC234 /* Pods_DripNDashTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DripNDashTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD6C3BA375F9FC1C786BD071 /* Pods_DripNDash.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DripNDash.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -142,6 +158,16 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		7C39567023FEF6A100733E3F /* FirestoreInterface */ = {
+			isa = PBXGroup;
+			children = (
+				7C39567123FEF6D800733E3F /* CustomerFirestore.swift */,
+				7C39567723FF173B00733E3F /* DasherFirestore.swift */,
+				7C6264D324041316001C470C /* JobRequestFirestore.swift */,
+			);
+			path = FirestoreInterface;
+			sourceTree = "<group>";
+		};
 		7C4394E123F6F8C700793064 = {
 			isa = PBXGroup;
 			children = (
@@ -167,11 +193,12 @@
 		7C4394EC23F6F8C700793064 /* DripNDash */ = {
 			isa = PBXGroup;
 			children = (
+				7C39567023FEF6A100733E3F /* FirestoreInterface */,
+				7CD240BC23FC85C400F9311A /* View */,
+				7CD240BB23FC85BC00F9311A /* Model */,
 				7C43957223F891B900793064 /* GoogleService-Info.plist */,
 				7C43952823F6FD0900793064 /* Utils */,
 				7C43951D23F6F8F500793064 /* Controller */,
-				7C43951C23F6F8EC00793064 /* View */,
-				7C43951B23F6F8E000793064 /* Model */,
 				7C4394ED23F6F8C700793064 /* AppDelegate.swift */,
 				7C4394EF23F6F8C700793064 /* ViewController.swift */,
 				7C4394F123F6F8C700793064 /* Main.storyboard */,
@@ -198,20 +225,6 @@
 				7C43950F23F6F8CC00793064 /* Info.plist */,
 			);
 			path = DripNDashUITests;
-			sourceTree = "<group>";
-		};
-		7C43951B23F6F8E000793064 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Model;
-			sourceTree = "<group>";
-		};
-		7C43951C23F6F8EC00793064 /* View */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = View;
 			sourceTree = "<group>";
 		};
 		7C43951D23F6F8F500793064 /* Controller */ = {
@@ -243,6 +256,7 @@
 				7C43953723F871B100793064 /* CustomerSettingsController.swift */,
 				7CD240B523F9DBA300F9311A /* CustomerJobStatusController.swift */,
 				7CD240B723F9DC5000F9311A /* CustomerJobHistoryController.swift */,
+				7CD240B923FC84C100F9311A /* CustomerJobsTableController.swift */,
 			);
 			path = Customer;
 			sourceTree = "<group>";
@@ -254,8 +268,26 @@
 				7C43953923F871C800793064 /* DasherTabBarController.swift */,
 				7C43952623F6FA2D00793064 /* DasherHomeController.swift */,
 				7C43953D23F871E800793064 /* DasherSettingsController.swift */,
+				7C549A442405C105009E9DE0 /* DasherJobsTableController.swift */,
 			);
 			path = Dasher;
+			sourceTree = "<group>";
+		};
+		7CD240BB23FC85BC00F9311A /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				7C39566E23FDFBC600733E3F /* JobRequest.swift */,
+				7C39567323FEFA7A00733E3F /* Customer.swift */,
+				7C39567923FF178F00733E3F /* Dasher.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		7CD240BC23FC85C400F9311A /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -498,19 +530,27 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7C6264D424041316001C470C /* JobRequestFirestore.swift in Sources */,
+				7CD240BA23FC84C100F9311A /* CustomerJobsTableController.swift in Sources */,
 				7CD240B823F9DC5000F9311A /* CustomerJobHistoryController.swift in Sources */,
 				7C43953A23F871C800793064 /* DasherTabBarController.swift in Sources */,
 				7C43952323F6F9FF00793064 /* RegisterController.swift in Sources */,
+				7C39567A23FF178F00733E3F /* Dasher.swift in Sources */,
 				7CD240B623F9DBA300F9311A /* CustomerJobStatusController.swift in Sources */,
 				7C43953423F86F3700793064 /* CustomerTabBarController.swift in Sources */,
 				7C43953623F8719D00793064 /* CustomerHomeController.swift in Sources */,
 				7C43953E23F871E800793064 /* DasherSettingsController.swift in Sources */,
 				7C43953023F75C8800793064 /* DasherRegisterController.swift in Sources */,
+				7C549A452405C106009E9DE0 /* DasherJobsTableController.swift in Sources */,
 				7C4394F023F6F8C700793064 /* ViewController.swift in Sources */,
 				7C43952723F6FA2D00793064 /* DasherHomeController.swift in Sources */,
+				7C39567423FEFA7A00733E3F /* Customer.swift in Sources */,
 				7C43953823F871B100793064 /* CustomerSettingsController.swift in Sources */,
 				7C43952C23F75C1800793064 /* CustomerRegisterController.swift in Sources */,
+				7C39567223FEF6D800733E3F /* CustomerFirestore.swift in Sources */,
+				7C39566F23FDFBC600733E3F /* JobRequest.swift in Sources */,
 				7C43952123F6F9E300793064 /* SignInController.swift in Sources */,
+				7C39567823FF173B00733E3F /* DasherFirestore.swift in Sources */,
 				7C4394EE23F6F8C700793064 /* AppDelegate.swift in Sources */,
 				7C43951F23F6F91300793064 /* ContainerController.swift in Sources */,
 				7C43952A23F6FD1600793064 /* Protocols.swift in Sources */,
