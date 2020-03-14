@@ -22,6 +22,8 @@ class DasherJobsTableController: UITableViewController {
     
     var inProgressJobs: [JobRequest] = []
     
+    var delegate: DasherJobsTableControllerDelegate?
+    
     // MARK: - Init
     
     override func viewDidLoad() {
@@ -48,6 +50,11 @@ class DasherJobsTableController: UITableViewController {
         cell.textLabel?.text = jobRequest.currentStatus
         cell.detailTextLabel?.text = jobRequest.jobID
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let jobRequest = inProgressJobs[indexPath.row]
+        delegate?.didSelectJob(jobRequest: jobRequest)
     }
     
     

@@ -7,16 +7,18 @@
 //
 
 import UIKit
+import Firebase
 
 class CustomerJobsTableController: UITableViewController {
     
-    // MARK: TEST Properties
+    // MARK: Properties
     
-    var delegateCustom: CustomerJobsTableControllerDelegate?
+    var delegate: CustomerJobsTableControllerDelegate?
     
-    // MARK: - Properties
+    var listeners: [String: ListenerRegistration] = [:]
+    let db = Firestore.firestore()
     
-    var inProgressJobs: [[String: String]] = [[:]]
+    var inProgressJobs: [JobRequest] = []
     
     // MARK: - Init
     
@@ -40,16 +42,44 @@ class CustomerJobsTableController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cell")
-        let job = inProgressJobs[indexPath.row]
-        
-        let status = job["status"] ?? "N/A"
-        let estEndTime = job["estEndTime"] ?? "N/A"
-        cell.textLabel?.text = status
-        cell.detailTextLabel?.text = estEndTime
-        return cell
-    }
+        let jobRequest = inProgressJobs[indexPath.row]
+        cell.textLabel?.text = jobRequest.currentStatus
+        cell.detailTextLabel?.text = jobRequest.jobID
+        return cell    }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        delegateCustom?.didSelectJob()
+        delegate?.didSelectJob(jobRequest: inProgressJobs[indexPath.row])
+    }
+    
+    // MARK: - Firestore Interface
+    
+    func addListenerToJobRequest(jobRequest: JobRequest) {
+        let inProgressDocRef = db.collection("jobsInProgress")
+            .document(jobRequest.jobID)
+        listeners[jobRequest.jobID] =
+            inProgressDocRef.addSnapshotListener { documentSnapshot, error in
+                guard let document = documentSnapshot else {
+                    print("CJTC.addListenerToJobRequest() Error: \(error!)")
+                    return
+                }
+                guard let data = document.data() else {
+                    print("CJTC.addListenerToJobRequest() Error: Document was empty)")
+                    return
+                }
+                jobRequest.assignedTimestamp = data["ASSIGNED_TIMESTAMP"] as? Timestamp ?? Timestamp(date: Date())
+                jobRequest.currentStage = data["CURRENT_STAGE"] as? Int ?? 0
+                jobRequest.dasherUID = data["DASHER_UID"] as? String ?? ""
+                
+                for i in 0..<self.inProgressJobs.count {
+                    let jr = self.inProgressJobs[i]
+                    print("tempJobRequest_ID: \(jr.jobID)")
+                    if jr.jobID == jobRequest.jobID {
+                        self.inProgressJobs[i] = jobRequest
+                    }
+                }
+                self.tableView.reloadData()
+                
+                print("CJTC.addListenerToJobRequest(): Value did change")
+            }
     }
 }

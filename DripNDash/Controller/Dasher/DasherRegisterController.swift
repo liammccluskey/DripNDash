@@ -333,6 +333,16 @@ class DasherRegisterController: UIViewController {
                         completedJobs: []
                     )
                     dasherFirestore.initDasherData(dasher: dasher)
+                    
+                    // Set currentUser.displayName to "worker", used to sign in
+                    let changeRequest = Auth.auth().currentUser?.createProfileChangeRequest()
+                    changeRequest?.displayName = "dasher"
+                    changeRequest?.commitChanges { (error) in
+                        if let error = error {
+                            print("CustomerRegisterController.registerAction() Error: couldn't set display name \(error)")
+                        }
+                    }
+
                 } else {
                     // TODO: HANDLE_ERROR
                 }

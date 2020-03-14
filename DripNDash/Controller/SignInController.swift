@@ -170,10 +170,10 @@ class SignInController: UIViewController {
         guard let password = passwordField.text else {return}
         Auth.auth().signIn(withEmail: email, password: password) { (authResult, error) in
             if authResult != nil {
-                let uid = Auth.auth().currentUser?.uid
-                let customerFirestore = CustomerFirestore()
-                customerFirestore.delegate = self
-                customerFirestore.determineUserClass(uid: uid!)
+
+                let userClass = Auth.auth().currentUser?.displayName
+                self.delegate?.userDidSignIn(userClass: userClass!)
+                
             } else {
                 // TODO: HANDLE_ERROR
             }

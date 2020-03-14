@@ -36,6 +36,9 @@
 		7C43957323F891B900793064 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7C43957223F891B900793064 /* GoogleService-Info.plist */; };
 		7C549A452405C106009E9DE0 /* DasherJobsTableController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C549A442405C105009E9DE0 /* DasherJobsTableController.swift */; };
 		7C6264D424041316001C470C /* JobRequestFirestore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6264D324041316001C470C /* JobRequestFirestore.swift */; };
+		7C65A9732412EC8600287092 /* DasherJobStatusController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C65A9722412EC8600287092 /* DasherJobStatusController.swift */; };
+		7C65A977241A5B3E00287092 /* CJSC_StageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C65A976241A5B3E00287092 /* CJSC_StageController.swift */; };
+		7C700BD2240F0BA3001D6287 /* DasherJobNotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C700BD1240F0BA3001D6287 /* DasherJobNotificationController.swift */; };
 		7CD240B623F9DBA300F9311A /* CustomerJobStatusController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CD240B523F9DBA300F9311A /* CustomerJobStatusController.swift */; };
 		7CD240B823F9DC5000F9311A /* CustomerJobHistoryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CD240B723F9DC5000F9311A /* CustomerJobHistoryController.swift */; };
 		7CD240BA23FC84C100F9311A /* CustomerJobsTableController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CD240B923FC84C100F9311A /* CustomerJobsTableController.swift */; };
@@ -96,6 +99,9 @@
 		7C43957223F891B900793064 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 		7C549A442405C105009E9DE0 /* DasherJobsTableController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DasherJobsTableController.swift; sourceTree = "<group>"; };
 		7C6264D324041316001C470C /* JobRequestFirestore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobRequestFirestore.swift; sourceTree = "<group>"; };
+		7C65A9722412EC8600287092 /* DasherJobStatusController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DasherJobStatusController.swift; sourceTree = "<group>"; };
+		7C65A976241A5B3E00287092 /* CJSC_StageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CJSC_StageController.swift; sourceTree = "<group>"; };
+		7C700BD1240F0BA3001D6287 /* DasherJobNotificationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DasherJobNotificationController.swift; sourceTree = "<group>"; };
 		7CD240B523F9DBA300F9311A /* CustomerJobStatusController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerJobStatusController.swift; sourceTree = "<group>"; };
 		7CD240B723F9DC5000F9311A /* CustomerJobHistoryController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerJobHistoryController.swift; sourceTree = "<group>"; };
 		7CD240B923FC84C100F9311A /* CustomerJobsTableController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerJobsTableController.swift; sourceTree = "<group>"; };
@@ -257,6 +263,7 @@
 				7CD240B523F9DBA300F9311A /* CustomerJobStatusController.swift */,
 				7CD240B723F9DC5000F9311A /* CustomerJobHistoryController.swift */,
 				7CD240B923FC84C100F9311A /* CustomerJobsTableController.swift */,
+				7C65A976241A5B3E00287092 /* CJSC_StageController.swift */,
 			);
 			path = Customer;
 			sourceTree = "<group>";
@@ -269,6 +276,8 @@
 				7C43952623F6FA2D00793064 /* DasherHomeController.swift */,
 				7C43953D23F871E800793064 /* DasherSettingsController.swift */,
 				7C549A442405C105009E9DE0 /* DasherJobsTableController.swift */,
+				7C700BD1240F0BA3001D6287 /* DasherJobNotificationController.swift */,
+				7C65A9722412EC8600287092 /* DasherJobStatusController.swift */,
 			);
 			path = Dasher;
 			sourceTree = "<group>";
@@ -534,6 +543,7 @@
 				7CD240BA23FC84C100F9311A /* CustomerJobsTableController.swift in Sources */,
 				7CD240B823F9DC5000F9311A /* CustomerJobHistoryController.swift in Sources */,
 				7C43953A23F871C800793064 /* DasherTabBarController.swift in Sources */,
+				7C700BD2240F0BA3001D6287 /* DasherJobNotificationController.swift in Sources */,
 				7C43952323F6F9FF00793064 /* RegisterController.swift in Sources */,
 				7C39567A23FF178F00733E3F /* Dasher.swift in Sources */,
 				7CD240B623F9DBA300F9311A /* CustomerJobStatusController.swift in Sources */,
@@ -547,6 +557,7 @@
 				7C39567423FEFA7A00733E3F /* Customer.swift in Sources */,
 				7C43953823F871B100793064 /* CustomerSettingsController.swift in Sources */,
 				7C43952C23F75C1800793064 /* CustomerRegisterController.swift in Sources */,
+				7C65A9732412EC8600287092 /* DasherJobStatusController.swift in Sources */,
 				7C39567223FEF6D800733E3F /* CustomerFirestore.swift in Sources */,
 				7C39566F23FDFBC600733E3F /* JobRequest.swift in Sources */,
 				7C43952123F6F9E300793064 /* SignInController.swift in Sources */,
@@ -554,6 +565,7 @@
 				7C4394EE23F6F8C700793064 /* AppDelegate.swift in Sources */,
 				7C43951F23F6F91300793064 /* ContainerController.swift in Sources */,
 				7C43952A23F6FD1600793064 /* Protocols.swift in Sources */,
+				7C65A977241A5B3E00287092 /* CJSC_StageController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

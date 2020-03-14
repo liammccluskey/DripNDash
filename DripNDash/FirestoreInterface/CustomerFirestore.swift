@@ -62,10 +62,4 @@ class CustomerFirestore {
             }
         }
     }
-    
-    func determineUserClass(uid: String) {
-        self.getCustomer(uid: uid)
-    }
-    
-    // MARK: - 
 }

@@ -14,9 +14,9 @@ class CustomerHomeController: UIViewController {
     
     // MARK: - Test Properties
     
+    var jobRequestFirestore: JobRequestFirestore!
     var customer: Customer!
-    var inProgressJobRequests: [JobRequest] = []
-    var inProgressJobs: [[String: String]] = [[:]]
+    var inProgressJobs: [JobRequest] = []
     
     // MARK: - Properties
     
@@ -48,7 +48,7 @@ class CustomerHomeController: UIViewController {
     }()
     
     let requestButton: UIButton = {
-        let button = UIButton()
+        let button = UIButton(type: .system)
         button.setTitle("Submit Request", for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 17, weight: .semibold)
         button.addTarget(self, action: #selector(requestAction), for: .touchUpInside)
@@ -87,20 +87,7 @@ class CustomerHomeController: UIViewController {
         return label
     }()
     
-    let statusButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("View Status Page", for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 17, weight: .semibold)
-        button.addTarget(self, action: #selector(statusAction), for: .touchUpInside)
-        button.backgroundColor = .black
-        button.layer.cornerRadius = 5
-        button.clipsToBounds = true
-        button.setTitleColor(.white, for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    
-    var jobsTableController: CustomerJobsTableController!
+    var tableController: CustomerJobsTableController!
     
     // MARK: - Init
     
@@ -111,6 +98,7 @@ class CustomerHomeController: UIViewController {
         setUpAutoLayout()
         
         setCustomer()
+        setJobRequestFirestore()
     }
     
     func setCustomer() {
@@ -118,6 +106,11 @@ class CustomerHomeController: UIViewController {
         let customerFirestore = CustomerFirestore()
         customerFirestore.delegate = self
         customerFirestore.getCustomer(uid: uid!)
+    }
+    
+    func setJobRequestFirestore() {
+        jobRequestFirestore = JobRequestFirestore()
+        jobRequestFirestore.delegate = self
     }
     
     // MARK: - Configure
@@ -134,9 +127,8 @@ class CustomerHomeController: UIViewController {
         // Status View portion
         statusView.addSubview(statusHeader)
         statusView.addSubview(statusDivider)
-        statusView.addSubview(statusButton)
-        configureJobsTableController()
-        statusView.addSubview(jobsTableController.tableView)
+        configureTableController()
+        statusView.addSubview(tableController.tableView)
         view.addSubview(statusView)
         
         title = "Home"
@@ -180,14 +172,11 @@ class CustomerHomeController: UIViewController {
         statusDivider.rightAnchor.constraint(equalTo: statusView.rightAnchor, constant: -borderConstant).isActive = true
         statusDivider.heightAnchor.constraint(equalToConstant: 3).isActive = true
         
-        jobsTableController.tableView.topAnchor.constraint(equalTo: statusDivider.bottomAnchor, constant: borderConstant).isActive = true
-        jobsTableController.tableView.bottomAnchor.constraint(equalTo: statusView.bottomAnchor, constant: -borderConstant).isActive = true
-        jobsTableController.tableView.rightAnchor.constraint(equalTo: statusView.rightAnchor, constant: -borderConstant).isActive = true
-        jobsTableController.tableView.leftAnchor.constraint(equalTo: statusView.leftAnchor, constant: borderConstant).isActive = true
+        tableController.tableView.topAnchor.constraint(equalTo: statusDivider.bottomAnchor, constant: borderConstant).isActive = true
+        tableController.tableView.bottomAnchor.constraint(equalTo: statusView.bottomAnchor, constant: -borderConstant).isActive = true
+        tableController.tableView.rightAnchor.constraint(equalTo: statusView.rightAnchor, constant: -borderConstant).isActive = true
+        tableController.tableView.leftAnchor.constraint(equalTo: statusView.leftAnchor, constant: borderConstant).isActive = true
         
-        statusButton.bottomAnchor.constraint(equalTo: statusView.bottomAnchor, constant: -borderConstant).isActive = true
-        statusButton.rightAnchor.constraint(equalTo: statusView.rightAnchor, constant: -borderConstant*5).isActive = true
-        statusButton.leftAnchor.constraint(equalTo: statusView.leftAnchor, constant: borderConstant*5).isActive = true
     }
     
     func configureNavigationBar() {
@@ -197,15 +186,9 @@ class CustomerHomeController: UIViewController {
         navigationItem.title = "Home"
     }
     
-    func configureJobsTableController() {
-        jobsTableController = CustomerJobsTableController()
-        jobsTableController.delegateCustom = self
-        jobsTableController.inProgressJobs = [
-            ["status": "Status: Pending Dasher Assignment",
-             "estEndTime": "Estimated Drop Off Time: 11:30 AM"
-            ]
-        ]
-        jobsTableController.tableView.reloadData()
+    func configureTableController() {
+        tableController = CustomerJobsTableController()
+        tableController.delegate = self
     }
     
     // Selectors
@@ -220,24 +203,18 @@ class CustomerHomeController: UIViewController {
         guard let customer = customer else {return}
         let jobID = UUID().uuidString
         let requestTimestamp = Timestamp(date: Date())
-        let jobRequest = JobRequest(jobID: jobID, requestTimestamp: requestTimestamp, numLoads: 1)
+        let jobRequest = JobRequest(
+            jobID: jobID,
+            requestTimestamp: requestTimestamp,
+            dorm: customer.dorm,
+            dormRoom: customer.dormRoom,
+            numLoads: 1
+        )
+        jobRequestFirestore.writeJobRequest(jobRequest: jobRequest, isRewrite: false)
         
-        let jobRequestFirestore = JobRequestFirestore()
-        jobRequestFirestore.writeJobRequest(jobRequest: jobRequest, forCustomer: customer)
-        
-        // TEST -> get rid of this fam
-        let laundryRequest = [
-            "status": "Status: Pending Dasher Assignment",
-            "estEndTime": "Estimated Drop Off time: 12:30 PM",
-            "id": UUID().uuidString
-        ]
-        jobsTableController.inProgressJobs.append(laundryRequest)
-        jobsTableController.tableView.reloadData()
-    }
-    
-    @objc func statusAction() {
-        let controller = CustomerJobStatusController()
-        navigationController?.pushViewController(controller, animated: true)
+        tableController.inProgressJobs.append(jobRequest)
+        tableController.tableView.reloadData()
+        tableController.addListenerToJobRequest(jobRequest: jobRequest)
     }
     
     @objc func historyAction() {
@@ -251,8 +228,8 @@ class CustomerHomeController: UIViewController {
 
 // TEST
 extension CustomerHomeController: CustomerJobsTableControllerDelegate {
-    func didSelectJob() {
-        let controller = CustomerJobStatusController()
+    func didSelectJob(jobRequest: JobRequest) {
+        let controller = CustomerJobStatusController(jobRequest: jobRequest)
         navigationController?.pushViewController(controller, animated: true)
     }
 }
@@ -261,4 +238,25 @@ extension CustomerHomeController: CustomerFirestoreDelegate {
     func sendCustomer(customer: Customer?) {
         self.customer = customer
     }
+}
+
+extension CustomerHomeController: JobRequestFirestoreDelegate {
+    func sendJobRequest(jobRequest: JobRequest) {
+        // This method handles Dasher side
+    }
+    
+    func sendUpdatedJobRequest(jobRequest: JobRequest) {
+        print("jobRequest_ID: \(jobRequest.jobID)")
+        for i in 0..<tableController.inProgressJobs.count {
+            let jr = tableController.inProgressJobs[i]
+            print("tempJobRequest_ID: \(jr.jobID)")
+            if jr.jobID == jobRequest.jobID {
+                tableController.inProgressJobs[i] = jobRequest
+                print("JRFDelegate.sendUpdatedJobRequest(): did update corresponding JR")
+            }
+        }
+        tableController.tableView.reloadData()
+    }
+    
+    
 }

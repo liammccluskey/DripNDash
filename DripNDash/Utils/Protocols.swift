@@ -11,7 +11,11 @@ protocol SignInControllerDelegate {
 }
 
 protocol CustomerJobsTableControllerDelegate {
-    func didSelectJob()
+    func didSelectJob(jobRequest: JobRequest)
+}
+
+protocol DasherJobsTableControllerDelegate {
+    func didSelectJob(jobRequest: JobRequest)
 }
 
 protocol CustomerFirestoreDelegate {
@@ -24,5 +28,18 @@ protocol DasherFirestoreDelegate {
 
 protocol JobRequestFirestoreDelegate {
     func sendJobRequest(jobRequest: JobRequest)
+    func sendUpdatedJobRequest(jobRequest: JobRequest)
+}
+
+protocol DasherJobNotificationDelegate {
+    func didReject(jobRequest: JobRequest)
+    func didAccept(jobRequest: JobRequest)
+}
+
+protocol DasherJobStatusControllerDelegate {
+    /*
+     Cache Management: Local update must update Main memory (analogy)
+    */
+    func didUpdateJobRequest(jobRequest: JobRequest)
 }
 

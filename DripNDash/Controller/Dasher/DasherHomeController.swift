@@ -15,8 +15,6 @@ class DasherHomeController: UIViewController {
     
     var dasher: Dasher!
     
-    var inProgressJobs: [JobRequest] = []
-    
     let statusView: UIView = {
         let view = UIView()
         view.layer.cornerRadius = 10
@@ -47,7 +45,7 @@ class DasherHomeController: UIViewController {
     var tableController: DasherJobsTableController!
     
     let requestButton: UIButton = {
-        let button = UIButton()
+        let button = UIButton(type: .system)
         button.setTitle("Assign Me a New Job", for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 17, weight: .semibold)
         button.addTarget(self, action: #selector(requestAction), for: .touchUpInside)
@@ -127,6 +125,7 @@ class DasherHomeController: UIViewController {
     
     func configureTableController() {
         tableController = DasherJobsTableController()
+        tableController.delegate = self
     }
     
     func configureNavigationBar() {
@@ -155,9 +154,9 @@ class DasherHomeController: UIViewController {
             jobRequestFirestore.getOldestJobRequest(availableToDasher: dasher)
         } else {
             print("DasherHomeController Error: dasher is nil")
-            let uid = Auth.auth().currentUser?.uid
+            let uid = "FAILED_ATTEMPT: Dasher was nil"
             let dasherTemp = Dasher(
-                uid: uid!,
+                uid: uid,
                 firstName: "liam",
                 lastName: "mccluskey",
                 email: "dripndashDeveloper@gmail.com",
@@ -177,8 +176,14 @@ class DasherHomeController: UIViewController {
 
 extension DasherHomeController: JobRequestFirestoreDelegate {
     func sendJobRequest(jobRequest: JobRequest) {
-        inProgressJobs.append(jobRequest)
-        tableController.tableView.reloadData()
+        print("DasherHomeController.JobRequestFirestoreDelegate.sendJobRequest(): sent job with ID \(jobRequest.jobID)")
+
+        let controller = DasherJobNotificationController(jobRequest: jobRequest)
+        controller.delegate = self
+        present(controller, animated: true)
+    }
+    
+    func sendUpdatedJobRequest(jobRequest: JobRequest) {
     }
 }
 
@@ -189,5 +194,28 @@ extension DasherHomeController: DasherFirestoreDelegate {
         } else {
             print("DasherHomeController.DasherFirestoreDelegate.sendDasher(): dasher is nil")
         }
+    }
+}
+
+extension DasherHomeController: DasherJobNotificationDelegate {
+    func didReject(jobRequest: JobRequest) {
+        let jrf = JobRequestFirestore()
+        jrf.writeJobRequest(jobRequest: jobRequest, isRewrite: true)
+    }
+    
+    func didAccept(jobRequest: JobRequest) {
+        jobRequest.updateOnAssignment(toDasher: dasher, atTime: Timestamp(date: Date()))
+        let jrf = JobRequestFirestore()
+        jrf.updateOnAssignment(jobRequest: jobRequest)
+        
+        tableController.inProgressJobs.append(jobRequest)
+        tableController.tableView.reloadData()
+    }
+}
+
+extension DasherHomeController: DasherJobsTableControllerDelegate {
+    func didSelectJob(jobRequest: JobRequest) {
+        let controller = DasherJobStatusController(jobRequest: jobRequest)
+        navigationController?.pushViewController(controller, animated: true)
     }
 }

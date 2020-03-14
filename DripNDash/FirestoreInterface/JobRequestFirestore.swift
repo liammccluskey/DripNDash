@@ -16,15 +16,18 @@ class JobRequestFirestore {
     
     let db = Firestore.firestore()
     
-    // MARK: - Writes to Firebase
-    
-    func writeJobRequest(jobRequest: JobRequest, forCustomer: Customer) {
+    // MARK: - Init Writes (or rewrites) of Job Request
+
+    func writeJobRequest(jobRequest: JobRequest, isRewrite: Bool) {
+    /*
+        Writes the customer's job request to Firestore
+    */
         // create pendingDoc
         let pendingDocData: [String: Any] = [
             "REQUEST_TIMESTAMP": jobRequest.requestTimestamp,
-        ]
+            ]
         let pendingDocRef = db.collection("dorms")
-            .document(forCustomer.dorm)
+            .document(jobRequest.dorm)
             .collection("jobsPendingAssignment")
             .document(jobRequest.jobID)
         
@@ -32,25 +35,55 @@ class JobRequestFirestore {
         let inProgressDocData: [String: Any] = [
             "JOB_ID": jobRequest.jobID,
             "REQUEST_TIMESTAMP": jobRequest.requestTimestamp,
-            "DORM": forCustomer.dorm,
-            "DORM_ROOM": forCustomer.dormRoom,
+            "DORM": jobRequest.dorm,
+            "DORM_ROOM": jobRequest.dormRoom,
             "NUM_LOADS": jobRequest.numLoads,
             "CURRENT_STAGE": jobRequest.currentStage,
             "ASSIGNED_TIMESTAMP": "",
             "COMPLETED_TIMESTAMP": "",
             "DASHER_UID": "",
-        ]
+            ]
         let inProgressDocRef = db.collection("jobsInProgress")
             .document(jobRequest.jobID)
         
         // batchWrite tempDoc @ pendingADDRESS and mainDoc @ inProgressADDRESS
         let batch = db.batch()
         batch.setData(pendingDocData, forDocument: pendingDocRef)
-        batch.setData(inProgressDocData, forDocument: inProgressDocRef)
+        if !isRewrite {
+            batch.setData(inProgressDocData, forDocument: inProgressDocRef)
+        }
         batch.commit { (error) in
             if let error = error {
                 print("Error occured submitting job request: \(error)")
                 // TODO: HANDLE_ERROR
+            }
+        }
+    }
+    
+    // MARK: - Updates to Job Request while in progress
+    
+    func updateOnAssignment(jobRequest: JobRequest) {
+        let fields: [AnyHashable: Any] = [
+            "DASHER_UID": jobRequest.dasherUID,
+            "ASSIGNED_TIMESTAMP": jobRequest.assignedTimestamp,
+            "CURRENT_STAGE": jobRequest.currentStage
+        ]
+        updateJobRequest(jobRequest: jobRequest, fields: fields)
+    }
+    
+    func updateOnWorkerUpdate(jobRequest: JobRequest) {
+        let fields: [AnyHashable: Any] = [
+            "CURRENT_STAGE": jobRequest.currentStage
+        ]
+        updateJobRequest(jobRequest: jobRequest, fields: fields)
+    }
+    
+    func updateJobRequest(jobRequest: JobRequest, fields: [AnyHashable: Any]) {
+        let inProgressDocRef = db.collection("jobsInProgress")
+            .document(jobRequest.jobID)
+        inProgressDocRef.updateData(fields) { (error) in
+            if let error = error {
+                print("JobRequestFirestore.updateJobRequest() Error: \(error)")
             }
         }
     }
@@ -79,6 +112,30 @@ class JobRequestFirestore {
         }
     }
     
+    func addListenerToJobRequest(jobRequest: JobRequest) {
+        let pendingDocRef = db.collection("dorms")
+            .document(jobRequest.dorm)
+            .collection("jobsPendingAssignment")
+            .document(jobRequest.jobID)
+        
+        pendingDocRef.addSnapshotListener { documentSnapshot, error in
+                guard let document = documentSnapshot else {
+                    print("JRF.addListenerToJobRequest() Error: \(error!)")
+                    return
+                }
+                guard let data = document.data() else {
+                    print("JRF.addListenerToJobRequest() Error: Document was empty)")
+                    return
+                }
+            jobRequest.assignedTimestamp = data["ASSIGNED_TIMESTAMP"] as? Timestamp ?? Timestamp(date: Date())
+            jobRequest.currentStage = data["CURRENT_STAGE"] as? Int ?? 0
+            jobRequest.dasherUID = data["DASHER_UID"] as? String ?? ""
+            self.delegate?.sendUpdatedJobRequest(jobRequest: jobRequest)
+            
+            print("JRF.addListenerToJobRequest(): Value did change")
+        }
+    }
+    
     // MARK: - Helpers
     
     func getInProgressJobRequest(fromDocumentID documentID: String, andAssignTo dasher: Dasher) {
@@ -94,6 +151,8 @@ class JobRequestFirestore {
                 let jobRequest = JobRequest(
                     jobID: documentData["JOB_ID"] as! String,
                     requestTimestamp: documentData["REQUEST_TIMESTAMP"] as! Timestamp,
+                    dorm: documentData["DORM"] as! String,
+                    dormRoom: documentData["DORM_ROOM"] as! Int,
                     numLoads: documentData["NUM_LOADS"] as! Int
                 )
                 jobRequest.dasherUID = dasher.uid
@@ -108,17 +167,4 @@ class JobRequestFirestore {
             }
         }
     }
-/*
-    func convertToJobRequest(from documentData: [String: Any], assignTo dasher: Dasher) -> JobRequest {
-        let jobRequest = JobRequest(
-            jobID: documentData["JOB_ID"] as! String,
-            requestTimestamp: documentData["REQUEST_TIMESTAMP"] as! Timestamp,
-            numLoads: documentData["NUM_LOADS"] as! Int
-        )
-        jobRequest.dasherUID = documentData["DASHER_UID"] as! String
-        jobRequest.assignedTimestamp = Timestamp(date: Date())
-        
-        return jobRequest
-    }
-*/
 }
