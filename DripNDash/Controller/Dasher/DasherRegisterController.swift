@@ -330,10 +330,13 @@ class DasherRegisterController: UIViewController {
                         email: email,
                         dorm: dorm,
                         dormRoom: Int(dormRoom)!,
+                        rating: 5,
+                        numCompletedJobs: 0,
+                        registerTimestamp: Timestamp(date: Date()),
                         completedJobs: []
                     )
                     dasherFirestore.initDasherData(dasher: dasher)
-                    
+ /*
                     // Set currentUser.displayName to "worker", used to sign in
                     let changeRequest = Auth.auth().currentUser?.createProfileChangeRequest()
                     changeRequest?.displayName = "dasher"
@@ -342,6 +345,7 @@ class DasherRegisterController: UIViewController {
                             print("CustomerRegisterController.registerAction() Error: couldn't set display name \(error)")
                         }
                     }
+ */
 
                 } else {
                     // TODO: HANDLE_ERROR

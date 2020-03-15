@@ -36,11 +36,22 @@ class DasherFirestore {
             "EMAIL": dasher.email,
             "DORM": dasher.dorm,
             "DORM_ROOM": dasher.dormRoom,
-            "COMPLETED_JOBS": dasher.completedJobs
+            "COMPLETED_JOBS": dasher.completedJobs,
+            "NUM_COMPLETED_JOBS": dasher.numCompletedJobs,
+            "RATING": dasher.rating,
+            "REGISTER_TIMESTAMP": dasher.registerTimestamp
         ]) { (error) in
             if let error = error {
                 // TODO: HANDLE_ERROR
                 print("DasherFirestore.initDasherData() Error: \(error)")
+            }
+        }
+        // Set currentUser.displayName to "dasher", used to sign in
+        let changeRequest = Auth.auth().currentUser?.createProfileChangeRequest()
+        changeRequest?.displayName = "dasher"
+        changeRequest?.commitChanges { (error) in
+            if let error = error {
+                print("CustomerRegisterController.registerAction() Error: couldn't set display name \(error)")
             }
         }
     }
@@ -61,6 +72,9 @@ class DasherFirestore {
                     email: docData["EMAIL"] as! String,
                     dorm: docData["DORM"] as! String,
                     dormRoom: docData["DORM_ROOM"] as! Int,
+                    rating: docData["RATING"] as! Int,
+                    numCompletedJobs: docData["NUM_COMPLETED_JOBS"] as! Int,
+                    registerTimestamp: docData["REGISTER_TIMESTAMP"] as! Timestamp,
                     completedJobs: docData["COMPLETED_JOBS"] as! [String]
                 )
                 self.delegate?.sendDasher(dasher: dasher)

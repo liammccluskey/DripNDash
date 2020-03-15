@@ -38,10 +38,14 @@ class JobRequestFirestore {
             "DORM": jobRequest.dorm,
             "DORM_ROOM": jobRequest.dormRoom,
             "NUM_LOADS": jobRequest.numLoads,
+            "CUSTOMER_INSTRUCTIONS": jobRequest.customerNotes,
+            "CUSTOMER_NAME": jobRequest.customerName,
             "CURRENT_STAGE": jobRequest.currentStage,
             "ASSIGNED_TIMESTAMP": "",
             "COMPLETED_TIMESTAMP": "",
             "DASHER_UID": "",
+            "DASHER_NAME" : "",
+            "DASHER_RATING": -1,
             ]
         let inProgressDocRef = db.collection("jobsInProgress")
             .document(jobRequest.jobID)
@@ -62,9 +66,11 @@ class JobRequestFirestore {
     
     // MARK: - Updates to Job Request while in progress
     
-    func updateOnAssignment(jobRequest: JobRequest) {
+    func updateOnAssignmentAccept(jobRequest: JobRequest) {
         let fields: [AnyHashable: Any] = [
             "DASHER_UID": jobRequest.dasherUID,
+            "DASHER_NAME": jobRequest.dasherName,
+            "DASHER_RATING": jobRequest.dasherRating,
             "ASSIGNED_TIMESTAMP": jobRequest.assignedTimestamp,
             "CURRENT_STAGE": jobRequest.currentStage
         ]
@@ -105,13 +111,13 @@ class JobRequestFirestore {
                 for document in querySnapshot!.documents {
                     // Read the documentID, use it to read the IPJ_doc and create jobrequest obj from it
                     let jobID = document.documentID
-                    self.getInProgressJobRequest(fromDocumentID: jobID, andAssignTo: dasher)
+                    self.getInProgressJobRequest(fromDocumentID: jobID)
                     pendingRef.document(jobID).delete()
                 }
             }
         }
     }
-    
+/*
     func addListenerToJobRequest(jobRequest: JobRequest) {
         let pendingDocRef = db.collection("dorms")
             .document(jobRequest.dorm)
@@ -135,12 +141,13 @@ class JobRequestFirestore {
             print("JRF.addListenerToJobRequest(): Value did change")
         }
     }
+*/
     
     // MARK: - Helpers
     
-    func getInProgressJobRequest(fromDocumentID documentID: String, andAssignTo dasher: Dasher) {
+    func getInProgressJobRequest(fromDocumentID documentID: String) {
     /*
-        Sends the JobRequest object with the delegate method
+         Caller: self.getOldestJobRequest()
     */
         let docRef = db.collection("jobsInProgress")
             .document(documentID)
@@ -151,13 +158,12 @@ class JobRequestFirestore {
                 let jobRequest = JobRequest(
                     jobID: documentData["JOB_ID"] as! String,
                     requestTimestamp: documentData["REQUEST_TIMESTAMP"] as! Timestamp,
+                    numLoads: documentData["NUM_LOADS"] as! Int,
                     dorm: documentData["DORM"] as! String,
                     dormRoom: documentData["DORM_ROOM"] as! Int,
-                    numLoads: documentData["NUM_LOADS"] as! Int
+                    customerName: documentData["CUSTOMER_NAME"] as! String,
+                    customerInstructions: documentData["CUSTOMER_INSTRUCTIONS"] as! String
                 )
-                jobRequest.dasherUID = dasher.uid
-                jobRequest.assignedTimestamp = Timestamp(date: Date())
-                
                 self.delegate?.sendJobRequest(jobRequest: jobRequest)
             } else {
                 // TODO: HANDLE_ERROR

@@ -140,7 +140,12 @@ class DasherHomeController: UIViewController {
     @objc func requestAction() {
         let jobRequestFirestore = JobRequestFirestore()
         jobRequestFirestore.delegate = self
-        jobRequestFirestore.getOldestJobRequest(availableToDasher: dasher)
+        if dasher != nil {
+            jobRequestFirestore.getOldestJobRequest(availableToDasher: dasher)
+        } else {
+            print("DasherHomeController.requestAction() Error: dasher was nil")
+        }
+        
         
         print("ran DasherHomeController.requestAction()")
     }
@@ -157,11 +162,14 @@ class DasherHomeController: UIViewController {
             let uid = "FAILED_ATTEMPT: Dasher was nil"
             let dasherTemp = Dasher(
                 uid: uid,
-                firstName: "liam",
-                lastName: "mccluskey",
+                firstName: "error_name",
+                lastName: "error_name",
                 email: "dripndashDeveloper@gmail.com",
-                dorm: "quad",
+                dorm: "error_dorm",
                 dormRoom: 101,
+                rating: 100,
+                numCompletedJobs: 100,
+                registerTimestamp: Timestamp(date: Date()),
                 completedJobs: []
             )
             jobRequestFirestore.getOldestJobRequest(availableToDasher: dasherTemp)
@@ -206,7 +214,7 @@ extension DasherHomeController: DasherJobNotificationDelegate {
     func didAccept(jobRequest: JobRequest) {
         jobRequest.updateOnAssignment(toDasher: dasher, atTime: Timestamp(date: Date()))
         let jrf = JobRequestFirestore()
-        jrf.updateOnAssignment(jobRequest: jobRequest)
+        jrf.updateOnAssignmentAccept(jobRequest: jobRequest)
         
         tableController.inProgressJobs.append(jobRequest)
         tableController.tableView.reloadData()

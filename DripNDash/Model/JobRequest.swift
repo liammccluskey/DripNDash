@@ -23,11 +23,15 @@ class JobRequest {
     let numLoads: Int
     let dorm: String
     let dormRoom: Int
+    let customerName: String
+    let customerInstructions: String
     
     // MARK: - Properties Assigned on Dasher_Accept
     
     var dasherUID: String!
     var assignedTimestamp: Timestamp!
+    var dasherName: String!
+    var dasherRating: Int!
     
     // MARK: - Dynamic Properties (updated by dasher throughout job)
     
@@ -58,17 +62,21 @@ class JobRequest {
     
     func updateOnAssignment(toDasher dasher: Dasher, atTime time: Timestamp) {
         dasherUID = dasher.uid
+        dasherName = "\(dasher.firstName) \(dasher.lastName)"
+        dasherRating = dasher.rating
         assignedTimestamp = time
         currentStage = 1
     }
     
     // MARK: - Init
     
-    init(jobID: String, requestTimestamp: Timestamp, dorm: String, dormRoom: Int, numLoads: Int) {
+    init(jobID: String, requestTimestamp: Timestamp, numLoads: Int, dorm: String, dormRoom: Int, customerName: String, customerNotes: String) {
         self.jobID = jobID
         self.requestTimestamp = requestTimestamp
+        self.numLoads = numLoads
         self.dorm = dorm
         self.dormRoom = dormRoom
-        self.numLoads = numLoads
+        self.customerName = customerName
+        self.customerInstructions = customerNotes
     }
 }

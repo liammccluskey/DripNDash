@@ -334,7 +334,7 @@ class CustomerRegisterController: UIViewController {
                         completedJobs: []
                     )
                     customerFirestore.initCustomerData(customer: customer)
-                    
+ /*
                     // Set currentUser.displayName to "client", used to sign in
                     let changeRequest = Auth.auth().currentUser?.createProfileChangeRequest()
                     changeRequest?.displayName = "customer"
@@ -343,6 +343,7 @@ class CustomerRegisterController: UIViewController {
                             print("CustomerRegisterController.registerAction() Error: couldn't set display name \(error)")
                         }
                     }
+*/
                 } else {
                     // TODO: HANDLE_ERROR
                     print("CustomerRegisterController.registerAction() Error: couldn't createUser(customer)")

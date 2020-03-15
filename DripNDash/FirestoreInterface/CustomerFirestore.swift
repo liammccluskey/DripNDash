@@ -37,7 +37,15 @@ class CustomerFirestore {
             "COMPLETED_JOBS": customer.completedJobs
         ]) { (error) in
             if let error = error {
-                // TODO: HANDLE_ERROR
+                print("CustomerRegisterController.initCustomerData() Error: \(error)")
+            }
+        }
+        // Set currentUser.displayName to "customer", used to sign in
+        let changeRequest = Auth.auth().currentUser?.createProfileChangeRequest()
+        changeRequest?.displayName = "customer"
+        changeRequest?.commitChanges { (error) in
+            if let error = error {
+                print("CustomerRegisterController.registerAction() Error: couldn't set display name \(error)")
             }
         }
     }

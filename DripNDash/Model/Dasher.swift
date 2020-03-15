@@ -6,6 +6,8 @@
 //  Copyright © 2020 Liam McCluskey. All rights reserved.
 //
 
+import Firebase
+
 struct Dasher {
     
     let uid: String
@@ -14,6 +16,9 @@ struct Dasher {
     let email: String
     let dorm: String
     let dormRoom: Int
+    let rating: Int
+    let numCompletedJobs: Int
+    let registerTimestamp: Timestamp
     
     var completedJobs: [String]
 }

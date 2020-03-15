@@ -47,6 +47,45 @@ class CustomerHomeController: UIViewController {
         return label
     }()
     
+    let numLoadsLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Estiamted Number of Loads:"
+        label.font = .systemFont(ofSize: 17, weight: .semibold)
+        label.backgroundColor = .clear
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    let numLoadsField: UITextField = {
+        let textField = UITextField()
+        textField.keyboardType = .numberPad
+        textField.backgroundColor = .white
+        textField.borderStyle = .roundedRect
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        return textField
+    }()
+    
+    let instructionsLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Instructions for Handling Your Laundry"
+        label.font = .systemFont(ofSize: 17, weight: .semibold)
+        label.backgroundColor = .clear
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    let instructionsField: UITextView = {
+        let textView = UITextView()
+        textView.backgroundColor = .white
+        textView.font = .systemFont(ofSize: 17)
+        textView.textAlignment = .left
+        textView.textColor = .black
+        textView.layer.cornerRadius = 5
+        textView.clipsToBounds = true
+        textView.translatesAutoresizingMaskIntoConstraints = false
+        return textView
+    }()
+    
     let requestButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Submit Request", for: .normal)
@@ -199,17 +238,18 @@ class CustomerHomeController: UIViewController {
     
     func requestActionHelper() {
         print("Ran method: CustomerHomeController.requestAction()")
-        // TEST: submit reqeust with static numLoads data (no text fields fam)
+        // TEST: submit request with static numLoads data (no text fields fam)
         guard let customer = customer else {return}
-        let jobID = UUID().uuidString
-        let requestTimestamp = Timestamp(date: Date())
         let jobRequest = JobRequest(
-            jobID: jobID,
-            requestTimestamp: requestTimestamp,
+            jobID: UUID().uuidString,
+            requestTimestamp: Timestamp(date: Date()),
+            numLoads: 1,
             dorm: customer.dorm,
             dormRoom: customer.dormRoom,
-            numLoads: 1
-        )
+            customerName: "\(customer.firstName) \(customer.lastName)"
+            customerNotes: ""
+            )
+        
         jobRequestFirestore.writeJobRequest(jobRequest: jobRequest, isRewrite: false)
         
         tableController.inProgressJobs.append(jobRequest)
