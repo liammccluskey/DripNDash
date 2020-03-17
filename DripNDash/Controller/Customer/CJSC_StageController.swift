@@ -37,7 +37,7 @@ class CJSC_StageController: UIViewController {
         let label = UILabel()
         label.backgroundColor = .clear
         label.textAlignment = .left
-        label.font = .systemFont(ofSize: 19, weight: .semibold)
+        label.font = .systemFont(ofSize: 17, weight: .semibold)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()

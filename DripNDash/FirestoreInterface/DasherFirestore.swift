@@ -72,7 +72,7 @@ class DasherFirestore {
                     email: docData["EMAIL"] as! String,
                     dorm: docData["DORM"] as! String,
                     dormRoom: docData["DORM_ROOM"] as! Int,
-                    rating: docData["RATING"] as! Int,
+                    rating: docData["RATING"] as! Double,
                     numCompletedJobs: docData["NUM_COMPLETED_JOBS"] as! Int,
                     registerTimestamp: docData["REGISTER_TIMESTAMP"] as! Timestamp,
                     completedJobs: docData["COMPLETED_JOBS"] as! [String]

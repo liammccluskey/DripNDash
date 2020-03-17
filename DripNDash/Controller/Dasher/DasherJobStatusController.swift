@@ -34,12 +34,16 @@ statusUpdateButtons =
 
 */
 import UIKit
+import Firebase
 
 class DasherJobStatusController: UIViewController {
     
     // MARK: - Properties
     
+    var delegate: DasherJobStatusControllerDelegate?
+    
     var jobRequest: JobRequest!
+    let jrf = JobRequestFirestore()
     
     let jobInfoView: UIView = {
         let view = UIView()
@@ -55,7 +59,7 @@ class DasherJobStatusController: UIViewController {
         label.text = "Job Information"
         label.textColor = .white
         label.textAlignment = .center
-        label.font = .systemFont(ofSize: 30, weight: .semibold)
+        label.font = .systemFont(ofSize: 25, weight: .semibold)
         label.backgroundColor = .clear
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -72,6 +76,7 @@ class DasherJobStatusController: UIViewController {
     var customerNameLabel: UILabel!
     var customerDormLabel: UILabel!
     var customerDormRoomLabel: UILabel!
+    var customerInstructionsLabel: UILabel!
     
     let updateStatusView: UIView = {
         let view = UIView()
@@ -87,7 +92,7 @@ class DasherJobStatusController: UIViewController {
         label.text = "Update Job Status"
         label.textColor = .white
         label.textAlignment = .center
-        label.font = .systemFont(ofSize: 30, weight: .semibold)
+        label.font = .systemFont(ofSize: 25, weight: .semibold)
         label.backgroundColor = .clear
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -129,6 +134,8 @@ class DasherJobStatusController: UIViewController {
         
         configureUI()
         setUpAutoLayout()
+        
+        reloadPageData()
     }
     
     init(jobRequest: JobRequest) {
@@ -147,21 +154,17 @@ class DasherJobStatusController: UIViewController {
         configureNavigationBar()
         
         // Job Information Section
-        customerNameLabel = configureJobInfoLabel(keyLabel: "Customer Name", valueLabel: "DEFAULT_NAME")
+        customerNameLabel = configureJobInfoLabel(keyLabel: "Customer Name", valueLabel: jobRequest.customerName)
         customerDormLabel = configureJobInfoLabel(keyLabel: "Customer Dorm", valueLabel: jobRequest.dorm)
         customerDormRoomLabel = configureJobInfoLabel(keyLabel: "Customer Dorm Room", valueLabel: String(jobRequest.dormRoom))
+        customerInstructionsLabel = configureJobInfoLabel(keyLabel: "Customer Instructions", valueLabel: jobRequest.customerInstructions)
         infoLabelStackView = configureStackView(arrangedSubViews: [
             customerNameLabel,
             customerDormLabel,
-            customerDormRoomLabel
+            customerDormRoomLabel,
+            customerInstructionsLabel
             ])
-        /*
-        jobInfoView.addSubview(customerNameLabel)
-        jobInfoView.addSubview(customerDormLabel)
-        jobInfoView.addSubview(customerDormRoomLabel)
- */
  
-        
         jobInfoView.addSubview(jobInfoHeader)
         jobInfoView.addSubview(jobInfoDivider)
         jobInfoView.addSubview(infoLabelStackView)
@@ -202,7 +205,7 @@ class DasherJobStatusController: UIViewController {
         jobInfoView.topAnchor.constraint(equalTo: view.topAnchor, constant: borderConstant).isActive = true
         jobInfoView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -borderConstant).isActive = true
         jobInfoView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: borderConstant).isActive = true
-        jobInfoView.heightAnchor.constraint(equalToConstant: view.frame.height/4).isActive = true
+        jobInfoView.heightAnchor.constraint(equalToConstant: view.frame.height/3).isActive = true
         
         jobInfoHeader.topAnchor.constraint(equalTo: jobInfoView.topAnchor, constant: borderConstant/2).isActive = true
         jobInfoHeader.centerXAnchor.constraint(equalTo: jobInfoView.centerXAnchor).isActive = true
@@ -216,18 +219,6 @@ class DasherJobStatusController: UIViewController {
         infoLabelStackView.rightAnchor.constraint(equalTo: jobInfoView.rightAnchor, constant: -borderConstant).isActive = true
         infoLabelStackView.leftAnchor.constraint(equalTo: jobInfoView.leftAnchor, constant: borderConstant).isActive = true
         infoLabelStackView.bottomAnchor.constraint(equalTo: jobInfoView.bottomAnchor, constant: -borderConstant).isActive = true
-  
-/*
-        customerNameLabel.topAnchor.constraint(equalTo: jobInfoDivider.bottomAnchor, constant: borderConstant).isActive = true
-        customerNameLabel.leftAnchor.constraint(equalTo: jobInfoView.leftAnchor, constant: borderConstant).isActive = true
-        
-        customerDormLabel.topAnchor.constraint(equalTo: customerNameLabel.bottomAnchor, constant: borderConstant).isActive = true
-        customerDormLabel.leftAnchor.constraint(equalTo: jobInfoView.leftAnchor, constant: borderConstant).isActive = true
-        
-        customerDormRoomLabel.topAnchor.constraint(equalTo: customerDormLabel.bottomAnchor, constant: borderConstant).isActive = true
-        customerDormRoomLabel.leftAnchor.constraint(equalTo: jobInfoView.leftAnchor, constant: borderConstant).isActive = true
-*/
-        
 
         // Update Status Section
         updateStatusView.topAnchor.constraint(equalTo: jobInfoView.bottomAnchor, constant: borderConstant).isActive = true
@@ -252,17 +243,18 @@ class DasherJobStatusController: UIViewController {
     func configureStackView(arrangedSubViews: [UIView]) -> UIStackView {
         let stackView = UIStackView(arrangedSubviews: arrangedSubViews)
         stackView.alignment = .fill
-        stackView.distribution = .fillEqually
+        stackView.distribution = .equalSpacing
         stackView.axis = .vertical
-        stackView.spacing = 5
+        stackView.spacing = 3
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }
     
     func configureStatusUpdateButton(titleLabel: String) -> UIButton {
         let button = UIButton(type: .system)
+        button.isEnabled = false
         button.setTitle(titleLabel, for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 19, weight: .semibold)
+        button.titleLabel?.font = .systemFont(ofSize: 16, weight: .semibold)
         button.addTarget(self, action: #selector(stageUpdateAction), for: .touchUpInside)
         button.backgroundColor = .darkGray
         button.layer.cornerRadius = 5
@@ -276,7 +268,8 @@ class DasherJobStatusController: UIViewController {
         label.text = "\(keyLabel):  \(valueLabel)"
         label.textColor = .white
         label.textAlignment = .left
-        label.font = .systemFont(ofSize: 19, weight: .semibold)
+        label.numberOfLines = 0
+        label.font = .systemFont(ofSize: 18, weight: .semibold)
         label.backgroundColor = .clear
         //label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -291,8 +284,86 @@ class DasherJobStatusController: UIViewController {
     // MARK: - Selectors
     
     @objc func stageUpdateAction() {
-        jobRequest.currentStage += 1
-        let jrf = JobRequestFirestore()
-        jrf.updateOnWorkerUpdate(jobRequest: jobRequest)
+        let updatedStage = jobRequest.currentStage + 1
+        jobRequest.updateOnStageChange(toStage: updatedStage)
+        jrf.updateOnStageChange(jobRequest: jobRequest)
+        
+        reloadPageData()
+        
+        if updatedStage == 7 {
+            showFinalizeCostAlert()
+        } else if updatedStage == 9 {
+            showJobCompletionAlert()
+        }
+    }
+    // MARK: - Helpers
+    
+    func reloadPageData() {
+        let stageUpdateButtons: [Int: UIButton] = [
+            2: stage2UpdateButton,
+            3: stage3UpdateButton,
+            4: stage4UpdateButton,
+            5: stage5UpdateButton,
+            6: stage6UpdateButton,
+            7: stage7UpdateButton,
+            8: stage8UpdateButton,
+            9: stage9UpdateButton
+        ]
+        
+        // jr.currentStage = 1 by the time it is assigned to dasher
+        for i in 1...jobRequest.currentStage {
+            guard let button = stageUpdateButtons[i] else {continue}
+            button.isEnabled = false
+            button.backgroundColor = .blue
+        }
+        
+        
+        guard let nextStageButton = stageUpdateButtons[jobRequest.currentStage+1] else {return}
+        nextStageButton.isEnabled = true
+        
+    }
+    
+    func showFinalizeCostAlert() {
+        let alert = UIAlertController(title: "Update Cost Information", message: "Enter the total cost you paid, and the number of loads of laundry you did to complete the customer's laundry request", preferredStyle: .alert)
+        
+        alert.addTextField(configurationHandler: { textField in
+            textField.placeholder = "Total cost incurred in $"
+            textField.keyboardType = .numberPad
+        })
+        alert.addTextField(configurationHandler: { textField in
+            textField.placeholder = "Total number of loads of laundry"
+        })
+        
+        alert.addAction(UIAlertAction(title: "Submit Information", style: .default, handler: { action in
+            guard let machineCost = alert.textFields?[0].text,
+                let numLoadsActual = alert.textFields?[1].text
+                else {return}
+            let mC = Double(machineCost)!
+            let nLA = Int(numLoadsActual)!
+            self.jobRequest.updateOnCostFinalized(machineCost: mC, numLoadsActual: nLA)
+            self.jrf.updateOnCostFinalized(jobRequest: self.jobRequest)
+        }))
+        
+        self.present(alert, animated: true)
+    }
+    
+    func showJobCompletionAlert() {
+        let alert = UIAlertController(title: "Job Complete", message: "You will receive $\(jobRequest.amountPaid!) for this job.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
+            self.didCompleteJob()
+        }))
+        
+        present(alert, animated: true)
+    }
+    
+    func didCompleteJob() {
+        jobRequest.udpateOnDasherCompletion(atTime: Timestamp(date: Date()))
+        jrf.udpateOnDasherCompletion(jobRequest: jobRequest)
+        jrf.writeCompletedJobOnDasherCompletion(jobRequest: jobRequest)
+        
+        delegate?.didComplete(jobRequest: jobRequest)
+        navigationController?.popViewController(animated: true)
+        
+        
     }
 }

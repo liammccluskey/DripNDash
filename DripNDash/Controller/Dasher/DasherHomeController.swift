@@ -12,7 +12,7 @@ import Firebase
 class DasherHomeController: UIViewController {
     
     // MARK: - Properties
-    
+        
     var dasher: Dasher!
     
     let statusView: UIView = {
@@ -180,6 +180,10 @@ class DasherHomeController: UIViewController {
         requestActionHelper()
     }
     
+    // MARK: - Helper
+    
+    
+    
 }
 
 extension DasherHomeController: JobRequestFirestoreDelegate {
@@ -224,6 +228,16 @@ extension DasherHomeController: DasherJobNotificationDelegate {
 extension DasherHomeController: DasherJobsTableControllerDelegate {
     func didSelectJob(jobRequest: JobRequest) {
         let controller = DasherJobStatusController(jobRequest: jobRequest)
+        controller.delegate = self
         navigationController?.pushViewController(controller, animated: true)
+    }
+}
+
+extension DasherHomeController: DasherJobStatusControllerDelegate {
+    func didComplete(jobRequest: JobRequest) {
+        tableController.inProgressJobs.removeAll { (jr) -> Bool in
+            jr.jobID == jobRequest.jobID
+        }
+        tableController.tableView.reloadData()
     }
 }

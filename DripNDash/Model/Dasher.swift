@@ -16,7 +16,7 @@ struct Dasher {
     let email: String
     let dorm: String
     let dormRoom: Int
-    let rating: Int
+    let rating: Double
     let numCompletedJobs: Int
     let registerTimestamp: Timestamp
     

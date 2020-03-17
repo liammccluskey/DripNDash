@@ -49,7 +49,8 @@ class CustomerHomeController: UIViewController {
     
     let numLoadsLabel: UILabel = {
         let label = UILabel()
-        label.text = "Estiamted Number of Loads:"
+        label.textColor = .white
+        label.text = "Estimated Number of Loads:"
         label.font = .systemFont(ofSize: 17, weight: .semibold)
         label.backgroundColor = .clear
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -67,23 +68,20 @@ class CustomerHomeController: UIViewController {
     
     let instructionsLabel: UILabel = {
         let label = UILabel()
-        label.text = "Instructions for Handling Your Laundry"
+        label.textColor = .white
+        label.text = "Instructions for Handling Your Laundry: "
         label.font = .systemFont(ofSize: 17, weight: .semibold)
         label.backgroundColor = .clear
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    let instructionsField: UITextView = {
-        let textView = UITextView()
-        textView.backgroundColor = .white
-        textView.font = .systemFont(ofSize: 17)
-        textView.textAlignment = .left
-        textView.textColor = .black
-        textView.layer.cornerRadius = 5
-        textView.clipsToBounds = true
-        textView.translatesAutoresizingMaskIntoConstraints = false
-        return textView
+    let instructionsField: UITextField = {
+        let textField = UITextField()
+        textField.backgroundColor = .white
+        textField.borderStyle = .roundedRect
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        return textField
     }()
     
     let requestButton: UIButton = {
@@ -160,6 +158,10 @@ class CustomerHomeController: UIViewController {
         // Request View portion
         requestView.addSubview(requestHeader)
         requestView.addSubview(requestDivider)
+        requestView.addSubview(numLoadsLabel)
+        requestView.addSubview(numLoadsField)
+        requestView.addSubview(instructionsLabel)
+        requestView.addSubview(instructionsField)
         requestView.addSubview(requestButton)
         view.addSubview(requestView)
         
@@ -192,9 +194,24 @@ class CustomerHomeController: UIViewController {
         requestDivider.rightAnchor.constraint(equalTo: requestView.rightAnchor, constant: -borderConstant).isActive = true
         requestDivider.heightAnchor.constraint(equalToConstant: 3).isActive = true
         
+        numLoadsLabel.topAnchor.constraint(equalTo: requestDivider.bottomAnchor, constant: borderConstant/2).isActive = true
+        numLoadsLabel.leftAnchor.constraint(equalTo: requestView.leftAnchor, constant: borderConstant).isActive = true
+        
+        numLoadsField.leftAnchor.constraint(equalTo: numLoadsLabel.rightAnchor, constant: borderConstant).isActive = true
+        numLoadsField.centerYAnchor.constraint(equalTo: numLoadsLabel.centerYAnchor).isActive = true
+        numLoadsField.heightAnchor.constraint(equalTo: numLoadsLabel.heightAnchor).isActive = true
+        
+        instructionsLabel.topAnchor.constraint(equalTo: numLoadsLabel.bottomAnchor, constant: borderConstant/2).isActive = true
+        instructionsLabel.leftAnchor.constraint(equalTo: requestView.leftAnchor, constant: borderConstant).isActive = true
+    
         requestButton.bottomAnchor.constraint(equalTo: requestView.bottomAnchor, constant: -borderConstant).isActive = true
         requestButton.rightAnchor.constraint(equalTo: requestView.rightAnchor, constant: -borderConstant*5).isActive = true
         requestButton.leftAnchor.constraint(equalTo: requestView.leftAnchor, constant: borderConstant*5).isActive = true
+        
+        instructionsField.topAnchor.constraint(equalTo: instructionsLabel.bottomAnchor, constant: borderConstant/2).isActive = true
+        instructionsField.leftAnchor.constraint(equalTo: requestView.leftAnchor, constant: borderConstant).isActive = true
+        instructionsField.rightAnchor.constraint(equalTo: requestView.rightAnchor, constant: -borderConstant).isActive = true
+        instructionsField.heightAnchor.constraint(equalTo: instructionsLabel.heightAnchor).isActive = true
         
         // Status View portion
         statusView.topAnchor.constraint(equalTo: view.centerYAnchor, constant: borderConstant/2).isActive = true
@@ -233,40 +250,52 @@ class CustomerHomeController: UIViewController {
     // Selectors
     
     @objc func requestAction() {
-        requestActionHelper()
-    }
-    
-    func requestActionHelper() {
-        print("Ran method: CustomerHomeController.requestAction()")
-        // TEST: submit request with static numLoads data (no text fields fam)
-        guard let customer = customer else {return}
+        guard let customer = customer,
+            let numLoads = numLoadsField.text,
+            let instructions = instructionsField.text
+            else {return}
         let jobRequest = JobRequest(
             jobID: UUID().uuidString,
+            customerUID: customer.uid,
             requestTimestamp: Timestamp(date: Date()),
-            numLoads: 1,
+            numLoadsEstimate: Int(numLoads)!,
             dorm: customer.dorm,
             dormRoom: customer.dormRoom,
-            customerName: "\(customer.firstName) \(customer.lastName)"
-            customerNotes: ""
-            )
+            customerName: "\(customer.firstName) \(customer.lastName)",
+            customerInstructions: instructions
+        )
+        showConfirmRequestAlert(forJobRequest: jobRequest)
+    }
+    
+    @objc func historyAction() {
+        let controller = CustomerJobHistoryController()
+        navigationController?.pushViewController(controller, animated: true)
+    }
+    
+    // MARK: - Helper
+    
+    func showConfirmRequestAlert(forJobRequest jobRequest: JobRequest) {
+        let costEstimate = jobRequest.estimatedTotalCost(forNumLoads: jobRequest.numLoadsEstimate)
+        let alert = UIAlertController(title: "Confirm this Laundry Request", message: "Estimated Cost: $\(costEstimate)", preferredStyle: .alert)
         
+        alert.addAction(UIAlertAction(title: "Cancel Request", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "Submit Request", style: .default, handler: { (action) in
+            self.submitJobRequest(jobRequest: jobRequest)
+        }))
+        
+        self.present(alert, animated: true)
+    }
+    
+    func submitJobRequest(jobRequest: JobRequest) {
         jobRequestFirestore.writeJobRequest(jobRequest: jobRequest, isRewrite: false)
         
         tableController.inProgressJobs.append(jobRequest)
         tableController.tableView.reloadData()
         tableController.addListenerToJobRequest(jobRequest: jobRequest)
     }
-    
-    @objc func historyAction() {
-        let controller = CustomerJobHistoryController()
-        navigationController?.pushViewController(controller, animated: true)
-        
-        // TODO: Get rid of this, it shouldn't be here
-        requestAction()
-    }
 }
 
-// TEST
+
 extension CustomerHomeController: CustomerJobsTableControllerDelegate {
     func didSelectJob(jobRequest: JobRequest) {
         let controller = CustomerJobStatusController(jobRequest: jobRequest)

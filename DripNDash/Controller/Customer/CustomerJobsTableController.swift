@@ -66,9 +66,7 @@ class CustomerJobsTableController: UITableViewController {
                     print("CJTC.addListenerToJobRequest() Error: Document was empty)")
                     return
                 }
-                jobRequest.assignedTimestamp = data["ASSIGNED_TIMESTAMP"] as? Timestamp ?? Timestamp(date: Date())
-                jobRequest.currentStage = data["CURRENT_STAGE"] as? Int ?? 0
-                jobRequest.dasherUID = data["DASHER_UID"] as? String ?? ""
+                let jobRequest = JobRequest(fromDocData: data)
                 
                 for i in 0..<self.inProgressJobs.count {
                     let jr = self.inProgressJobs[i]

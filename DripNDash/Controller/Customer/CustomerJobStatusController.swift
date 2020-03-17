@@ -14,8 +14,79 @@ class CustomerJobStatusController: UIViewController {
     // MARK: - Properties
     
     var jobRequest: JobRequest!
+    let jrf = JobRequestFirestore()
     var listener: ListenerRegistration!
     let db = Firestore.firestore()
+    
+    let jobInfoView: UIView = {
+        let view = UIView()
+        view.layer.cornerRadius = 10
+        view.clipsToBounds = true
+        view.backgroundColor = UIColor.init(red: 135/255, green: 206/255, blue: 235/255, alpha: 1)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    let jobInfoHeader: UILabel = {
+        let label = UILabel()
+        label.text = "Job Information"
+        label.textColor = .white
+        label.textAlignment = .center
+        label.font = .systemFont(ofSize: 25, weight: .semibold)
+        label.backgroundColor = .clear
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    let jobInfoDivider: UILabel = {
+        let label = UILabel()
+        label.backgroundColor = .white
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    var jobInfoStackView: UIStackView!
+    var dasherNameLabel: UILabel!
+    var dasherRatingLabel: UILabel!
+    var estimatedCostLabel: UILabel!
+    var estimatedNumLoadsLabel: UILabel!
+    var instructionsLabel: UILabel!
+    
+    let jobStatusView: UIView = {
+        let view = UIView()
+        view.layer.cornerRadius = 10
+        view.clipsToBounds = true
+        view.backgroundColor = UIColor.init(red: 135/255, green: 206/255, blue: 235/255, alpha: 1)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    let jobStatusHeader: UILabel = {
+        let label = UILabel()
+        label.text = "Job Status"
+        label.textColor = .white
+        label.textAlignment = .center
+        label.font = .systemFont(ofSize: 25, weight: .semibold)
+        label.backgroundColor = .clear
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    let jobStatusDivider: UILabel = {
+        let label = UILabel()
+        label.backgroundColor = .white
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    let embeddedJobStatusView: UIView = {
+        let view = UIView()
+        view.layer.cornerRadius = 10
+        view.clipsToBounds = true
+        view.backgroundColor = .white
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
     
     var statusStackView: UIStackView!
   
@@ -38,6 +109,17 @@ class CustomerJobStatusController: UIViewController {
     var stage89b: UIView!
     var stage89d: UIView!
     var stage89a: UIView!
+    
+    let cancelButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.backgroundColor = .red
+        button.setTitle("Cancel Request", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 20, weight: .semibold)
+        button.addTarget(self, action: #selector(cancelAction), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
 
     // MARK: - Init
     
@@ -64,6 +146,26 @@ class CustomerJobStatusController: UIViewController {
     // MARK: - Config
     
     func configureUI(){
+        // Job Information Portion
+        dasherNameLabel = configureJobInfoLabel(keyLabel: "Dasher Name", valueLabel: jobRequest.dasherName)
+        dasherRatingLabel = configureJobInfoLabel(keyLabel: "Dasher Rating", valueLabel: String(jobRequest.dasherRating))
+        estimatedCostLabel = configureJobInfoLabel(keyLabel: "Estimated Cost ($)", valueLabel: String(jobRequest.estimatedTotalCost(forNumLoads: jobRequest.numLoadsEstimate)))
+        estimatedNumLoadsLabel = configureJobInfoLabel(keyLabel: "Estimated Number of Loads", valueLabel: String(jobRequest.numLoadsEstimate))
+        instructionsLabel = configureJobInfoLabel(keyLabel: "Your Instructions", valueLabel: jobRequest.customerInstructions)
+        jobInfoStackView = configureStackView(arrangedSubViews: [
+            dasherNameLabel,
+            dasherRatingLabel,
+            estimatedCostLabel,
+            estimatedNumLoadsLabel,
+            instructionsLabel
+            ])
+        
+        jobInfoView.addSubview(jobInfoHeader)
+        jobInfoView.addSubview(jobInfoDivider)
+        jobInfoView.addSubview(jobInfoStackView)
+        view.addSubview(jobInfoView)
+        
+        // Job Status Portion
         stage01b = configureStageView(stageIndex: 0, subStageIndex: 0)
         stage01d = configureStageView(stageIndex: 0, subStageIndex: 1)
         stage01a = configureStageView(stageIndex: 1, subStageIndex: 2)
@@ -85,7 +187,15 @@ class CustomerJobStatusController: UIViewController {
         stage89a = configureStageView(stageIndex: 9, subStageIndex: 2)
         
         statusStackView = configureStackView(arrangedSubViews: [stage01b, stage23b, stage45b, stage67b, stage89b])
-        view.addSubview(statusStackView)
+        
+        embeddedJobStatusView.addSubview(statusStackView)
+        
+        jobStatusView.addSubview(jobStatusHeader)
+        jobStatusView.addSubview(jobStatusDivider)
+        jobStatusView.addSubview(embeddedJobStatusView)
+        view.addSubview(jobStatusView)
+        
+        view.addSubview(cancelButton)
         
         view.backgroundColor = .white
         title = "Laundry Request Status"
@@ -94,10 +204,54 @@ class CustomerJobStatusController: UIViewController {
     func setUpAutoLayout(){
         let border: CGFloat = 10
         
-        statusStackView.topAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-        statusStackView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -border).isActive = true
-        statusStackView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: border).isActive = true
-        statusStackView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -border).isActive = true
+        // global anchor points
+        cancelButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+        cancelButton.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        cancelButton.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        
+        // Job Information Portion
+        jobInfoView.topAnchor.constraint(equalTo: view.topAnchor, constant: border).isActive = true
+        jobInfoView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -border).isActive = true
+        jobInfoView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: border).isActive = true
+        jobInfoView.heightAnchor.constraint(equalToConstant: view.frame.height/3).isActive = true
+        
+        jobInfoHeader.topAnchor.constraint(equalTo: jobInfoView.topAnchor, constant: border/2).isActive = true
+        jobInfoHeader.centerXAnchor.constraint(equalTo: jobInfoView.centerXAnchor).isActive = true
+        
+        jobInfoDivider.topAnchor.constraint(equalTo: jobInfoHeader.bottomAnchor, constant: border/2).isActive = true
+        jobInfoDivider.rightAnchor.constraint(equalTo: jobInfoView.rightAnchor, constant: -border).isActive = true
+        jobInfoDivider.leftAnchor.constraint(equalTo: jobInfoView.leftAnchor, constant: border).isActive = true
+        jobInfoDivider.heightAnchor.constraint(equalToConstant: 3).isActive = true
+        
+        jobInfoStackView.topAnchor.constraint(equalTo: jobInfoDivider.bottomAnchor, constant: border).isActive = true
+        jobInfoStackView.rightAnchor.constraint(equalTo: jobInfoView.rightAnchor, constant: -border).isActive = true
+        jobInfoStackView.leftAnchor.constraint(equalTo: jobInfoView.leftAnchor, constant: border).isActive = true
+        jobInfoStackView.bottomAnchor.constraint(equalTo: jobInfoView.bottomAnchor, constant: -border).isActive = true
+        
+        // JOb Status portion
+        jobStatusView.topAnchor.constraint(equalTo: jobInfoView.bottomAnchor, constant: border).isActive = true
+        jobStatusView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -border).isActive = true
+        jobStatusView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: border).isActive = true
+        jobStatusView.bottomAnchor.constraint(equalTo: cancelButton.topAnchor, constant: -border).isActive = true
+        
+        jobStatusHeader.topAnchor.constraint(equalTo: jobStatusView.topAnchor, constant: border/2).isActive = true
+        jobStatusHeader.centerXAnchor.constraint(equalTo: jobInfoView.centerXAnchor).isActive = true
+        
+        jobStatusDivider.topAnchor.constraint(equalTo: jobStatusHeader.bottomAnchor, constant: border/2).isActive = true
+        jobStatusDivider.rightAnchor.constraint(equalTo: jobInfoView.rightAnchor, constant: -border).isActive = true
+        jobStatusDivider.leftAnchor.constraint(equalTo: jobInfoView.leftAnchor, constant: border).isActive = true
+        jobStatusDivider.heightAnchor.constraint(equalToConstant: 3).isActive = true
+        
+        embeddedJobStatusView.topAnchor.constraint(equalTo: jobStatusDivider.bottomAnchor, constant: border).isActive = true
+        embeddedJobStatusView.rightAnchor.constraint(equalTo: jobStatusView.rightAnchor, constant: -border).isActive = true
+        embeddedJobStatusView.leftAnchor.constraint(equalTo: jobStatusView.leftAnchor, constant: border).isActive = true
+        embeddedJobStatusView.bottomAnchor.constraint(equalTo: jobStatusView.bottomAnchor, constant: -border).isActive = true
+        
+        statusStackView.topAnchor.constraint(equalTo: embeddedJobStatusView.topAnchor, constant: 3*border).isActive = true
+        statusStackView.rightAnchor.constraint(equalTo: embeddedJobStatusView.rightAnchor, constant: -border).isActive = true
+        statusStackView.leftAnchor.constraint(equalTo: embeddedJobStatusView.leftAnchor, constant: border).isActive = true
+        statusStackView.bottomAnchor.constraint(equalTo: embeddedJobStatusView.bottomAnchor, constant: -3*border).isActive = true
+        
     }
     
     func configureStageView(stageIndex: Int, subStageIndex: Int) -> UIView {
@@ -110,14 +264,34 @@ class CustomerJobStatusController: UIViewController {
     func configureStackView(arrangedSubViews: [UIView]) -> UIStackView {
         let stackView = UIStackView(arrangedSubviews: arrangedSubViews)
         stackView.alignment = .fill
-        stackView.distribution = .fillEqually
+        stackView.distribution = .equalSpacing
         stackView.axis = .vertical
-        stackView.spacing = 5
+        stackView.spacing = 3
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }
     
+    func configureJobInfoLabel(keyLabel: String, valueLabel: String) -> UILabel {
+        let label = UILabel()
+        label.text = "\(keyLabel):  \(valueLabel)"
+        label.textColor = .white
+        label.textAlignment = .left
+        label.numberOfLines = 0
+        label.font = .systemFont(ofSize: 18, weight: .semibold)
+        label.backgroundColor = .clear
+        //label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }
+    
     // MARK: - Selectors
+    
+    @objc func cancelAction() {
+        if jobRequest.currentStage <= 2 {
+            showConfirmCancelAlert()
+        } else {
+            showCannotCancelAlert()
+        }
+    }
     
     // MARK: - Helpers
     
@@ -136,8 +310,32 @@ class CustomerJobStatusController: UIViewController {
                 }
                 jobRequest.currentStage = data["CURRENT_STAGE"] as? Int ?? 0
                 self.updateStatusStackView(atStage: jobRequest.currentStage)
+                self.reloadJobInfoStackView()
         }
     }
+    
+    
+    
+    func showConfirmCancelAlert() {
+        let alert = UIAlertController(title: "Cancel This Request", message: "Are you sure you want to cancel this request?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "No, don't cancel", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "Yes, cancel it", style: .default, handler: { (action) in
+            self.jobRequest.updateOnCustomerCancel()
+            self.jrf.updateOnCustomerCancel(jobRequest: self.jobRequest)
+            // notify tableController to remove this entry
+            // set dasher side listener to detect cancellation
+            
+        }))
+        present(alert, animated: true)
+    }
+    
+    func showCannotCancelAlert() {
+        let alert = UIAlertController(title: "Cannot Cancel Request", message: "Since a dasher has already picked up your laundry, your request is in progress and cannot be cancelled.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Cancel Request", style: .cancel, handler: nil))
+        present(alert, animated: true)
+    }
+    
+    // MARK: - Reload Page data
     
     func updateStatusStackView(atStage stage: Int) {
         let step: Int = stage/2
@@ -164,7 +362,7 @@ class CustomerJobStatusController: UIViewController {
                 "during": stage89d,
                 "after": stage89a
             ],
-        ]
+            ]
         
         let currentStageView = statusStackView.arrangedSubviews[step]
         let newStageView = stageViews[step]![subStage]!
@@ -180,4 +378,11 @@ class CustomerJobStatusController: UIViewController {
             updateStatusStackView(atStage: i)
         }
     }
+    
+    func reloadJobInfoStackView() {
+        dasherRatingLabel.text? = "Dasher Rating: \(jobRequest.dasherRating!)"
+        dasherNameLabel.text? = "Dasher Name: \(jobRequest.dasherName!)"
+    }
+    
+    
 }

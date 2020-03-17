@@ -37,9 +37,12 @@ protocol DasherJobNotificationDelegate {
 }
 
 protocol DasherJobStatusControllerDelegate {
-    /*
-     Cache Management: Local update must update Main memory (analogy)
-    */
-    func didUpdateJobRequest(jobRequest: JobRequest)
+/*
+     Conforms:
+     - DasherHomeController: Tells DasherJobsTableController to remove a JR obj
+*/
+    func didComplete(jobRequest: JobRequest)
 }
+
+
 

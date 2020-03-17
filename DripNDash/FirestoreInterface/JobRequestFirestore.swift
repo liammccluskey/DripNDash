@@ -16,11 +16,11 @@ class JobRequestFirestore {
     
     let db = Firestore.firestore()
     
-    // MARK: - Init Writes (or rewrites) of Job Request
+    // MARK: - Job Submission / Resubmission
 
     func writeJobRequest(jobRequest: JobRequest, isRewrite: Bool) {
     /*
-        Writes the customer's job request to Firestore
+        Writes the customer's job request to Firestore, or rewrites only to jobsPendingAssignment collection if isRewrite = true
     */
         // create pendingDoc
         let pendingDocData: [String: Any] = [
@@ -32,21 +32,7 @@ class JobRequestFirestore {
             .document(jobRequest.jobID)
         
         // create inProgressDoc
-        let inProgressDocData: [String: Any] = [
-            "JOB_ID": jobRequest.jobID,
-            "REQUEST_TIMESTAMP": jobRequest.requestTimestamp,
-            "DORM": jobRequest.dorm,
-            "DORM_ROOM": jobRequest.dormRoom,
-            "NUM_LOADS": jobRequest.numLoads,
-            "CUSTOMER_INSTRUCTIONS": jobRequest.customerNotes,
-            "CUSTOMER_NAME": jobRequest.customerName,
-            "CURRENT_STAGE": jobRequest.currentStage,
-            "ASSIGNED_TIMESTAMP": "",
-            "COMPLETED_TIMESTAMP": "",
-            "DASHER_UID": "",
-            "DASHER_NAME" : "",
-            "DASHER_RATING": -1,
-            ]
+        let inProgressDocData = jobRequest.toJobsInProgressData()
         let inProgressDocRef = db.collection("jobsInProgress")
             .document(jobRequest.jobID)
         
@@ -64,6 +50,40 @@ class JobRequestFirestore {
         }
     }
     
+    // MARK: Job Request cancellations
+    
+    func deleteJobRequest(jobRequest: JobRequest) {
+    /*
+         Caller: DasherJobsTableController ON(listener detects "WAS_CANCELLED" = true)
+    */
+        let pendingDocRef = db.collection("dorms")
+            .document(jobRequest.dorm)
+            .collection("jobsPendingAssignment")
+            .document(jobRequest.jobID)
+        let inProgressDocRef = db.collection("jobsInProgress")
+            .document(jobRequest.jobID)
+        
+        pendingDocRef.delete { (error) in
+            guard let error = error else {return}
+            print("JRF.deleteJobRequest() Error deleting @JPAaddress: \(error)")
+        }
+        inProgressDocRef.delete { (error) in
+            guard let error = error else {return}
+            print("JRF.deleteJobRequest() Error deleting @ IPJaddress: \(error)")
+
+        }
+    }
+    
+    func updateOnCustomerCancel(jobRequest: JobRequest) {
+    /*
+         Caller: CustomerJobStatusController ON(user clicks cancel job reqeust)
+    */
+        let fields: [AnyHashable: Any] = [
+            "WAS_CANCELLED": jobRequest.wasCancelled
+        ]
+        updateJobRequest(jobRequest: jobRequest, fields: fields)
+    }
+    
     // MARK: - Updates to Job Request while in progress
     
     func updateOnAssignmentAccept(jobRequest: JobRequest) {
@@ -77,22 +97,61 @@ class JobRequestFirestore {
         updateJobRequest(jobRequest: jobRequest, fields: fields)
     }
     
-    func updateOnWorkerUpdate(jobRequest: JobRequest) {
+    func updateOnStageChange(jobRequest: JobRequest) {
         let fields: [AnyHashable: Any] = [
             "CURRENT_STAGE": jobRequest.currentStage
         ]
         updateJobRequest(jobRequest: jobRequest, fields: fields)
     }
     
-    func updateJobRequest(jobRequest: JobRequest, fields: [AnyHashable: Any]) {
-        let inProgressDocRef = db.collection("jobsInProgress")
+    func updateOnCostFinalized(jobRequest: JobRequest) {
+        let fields: [AnyHashable: Any] = [
+            "MACHINE_COST": jobRequest.machineCost,
+            "NUM_LOADS_ACTUAL": jobRequest.numLoadsActual,
+            "AMOUNT_PAID": jobRequest.amountPaid
+        ]
+        updateJobRequest(jobRequest: jobRequest, fields: fields)
+    }
+    
+    func udpateOnDasherCompletion(jobRequest: JobRequest) {
+        let fields: [AnyHashable: Any] = [
+            "COMPLETED_TIMESTAMP": jobRequest.completedTimestamp
+        ]
+        updateJobRequest(jobRequest: jobRequest, fields: fields)
+
+    }
+    
+    // MARK: - Job Reqeust writes/updates after completion/cancellation to jobsCompleted/jobID
+    
+    func writeCompletedJobOnDasherCompletion(jobRequest: JobRequest) {
+    /*
+         Caller: DasherJobStatusController ON(user clicks stage9updatebutton)
+    */
+        let docRef = db.collection("jobsCompleted")
             .document(jobRequest.jobID)
-        inProgressDocRef.updateData(fields) { (error) in
-            if let error = error {
-                print("JobRequestFirestore.updateJobRequest() Error: \(error)")
-            }
+        let data = jobRequest.toJobsCompletedData()
+        docRef.setData(data) { (error) in
+            guard let error = error else {return}
+            print("JRF.writecompletedJobOnDasherCompletion() Error: \(error)")
         }
     }
+    
+    func udpateCompletedJobOnCustomerReview(jobRequest: JobRequest) {
+    /*
+         Caller: CustomerReviewController ON(user clicks submit review button)
+    */
+        let docRef = db.collection("jobsCompleted")
+            .document(jobRequest.jobID)
+        let fields: [AnyHashable: Any] = [
+            "CUSTOMER_REVIEW": jobRequest.customerReview,
+            "CUSTOMER_RATING": jobRequest.customerRating
+        ]
+        docRef.updateData(fields) { (error) in
+            guard let error = error else {return}
+            print("JRF.updateCompletedJobOnCustomerReview() Error: \(error)")
+        }
+    }
+    
     
     // MARK: - Reads from Firebase
     
@@ -109,7 +168,6 @@ class JobRequestFirestore {
                 print("Error occured fetching oldest document: \(error)")
             } else {
                 for document in querySnapshot!.documents {
-                    // Read the documentID, use it to read the IPJ_doc and create jobrequest obj from it
                     let jobID = document.documentID
                     self.getInProgressJobRequest(fromDocumentID: jobID)
                     pendingRef.document(jobID).delete()
@@ -117,31 +175,6 @@ class JobRequestFirestore {
             }
         }
     }
-/*
-    func addListenerToJobRequest(jobRequest: JobRequest) {
-        let pendingDocRef = db.collection("dorms")
-            .document(jobRequest.dorm)
-            .collection("jobsPendingAssignment")
-            .document(jobRequest.jobID)
-        
-        pendingDocRef.addSnapshotListener { documentSnapshot, error in
-                guard let document = documentSnapshot else {
-                    print("JRF.addListenerToJobRequest() Error: \(error!)")
-                    return
-                }
-                guard let data = document.data() else {
-                    print("JRF.addListenerToJobRequest() Error: Document was empty)")
-                    return
-                }
-            jobRequest.assignedTimestamp = data["ASSIGNED_TIMESTAMP"] as? Timestamp ?? Timestamp(date: Date())
-            jobRequest.currentStage = data["CURRENT_STAGE"] as? Int ?? 0
-            jobRequest.dasherUID = data["DASHER_UID"] as? String ?? ""
-            self.delegate?.sendUpdatedJobRequest(jobRequest: jobRequest)
-            
-            print("JRF.addListenerToJobRequest(): Value did change")
-        }
-    }
-*/
     
     // MARK: - Helpers
     
@@ -154,22 +187,24 @@ class JobRequestFirestore {
         docRef.getDocument { (document, error) in
             if let document = document {
                 let documentData = document.data()!
-                
-                let jobRequest = JobRequest(
-                    jobID: documentData["JOB_ID"] as! String,
-                    requestTimestamp: documentData["REQUEST_TIMESTAMP"] as! Timestamp,
-                    numLoads: documentData["NUM_LOADS"] as! Int,
-                    dorm: documentData["DORM"] as! String,
-                    dormRoom: documentData["DORM_ROOM"] as! Int,
-                    customerName: documentData["CUSTOMER_NAME"] as! String,
-                    customerInstructions: documentData["CUSTOMER_INSTRUCTIONS"] as! String
-                )
+                let jobRequest = JobRequest(fromDocData: documentData)
+            
                 self.delegate?.sendJobRequest(jobRequest: jobRequest)
             } else {
                 // TODO: HANDLE_ERROR
                 guard let error = error else {return}
                 print("Error occured fetching job reqest document: \(error)")
                 
+            }
+        }
+    }
+    
+    func updateJobRequest(jobRequest: JobRequest, fields: [AnyHashable: Any]) {
+        let inProgressDocRef = db.collection("jobsInProgress")
+            .document(jobRequest.jobID)
+        inProgressDocRef.updateData(fields) { (error) in
+            if let error = error {
+                print("JobRequestFirestore.updateJobRequest() Error: \(error)")
             }
         }
     }
