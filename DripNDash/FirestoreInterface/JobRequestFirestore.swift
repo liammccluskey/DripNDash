@@ -55,6 +55,7 @@ class JobRequestFirestore {
     func deleteJobRequest(jobRequest: JobRequest) {
     /*
          Caller: DasherJobsTableController ON(listener detects "WAS_CANCELLED" = true)
+         Caller: CustomerJobStatusController ON(customer submits review and JR finalized)
     */
         let pendingDocRef = db.collection("dorms")
             .document(jobRequest.dorm)

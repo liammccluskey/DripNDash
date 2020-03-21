@@ -34,8 +34,9 @@ class CustomerTabBarController: UITabBarController {
         //tabBar.tintColor = .white
         
         // white bar with black items
-        tabBar.barTintColor = .white
-        tabBar.tintColor = .black
+        //tabBar.barTintColor = .white
+        //tabBar.tintColor = .black
+        
         tabBar.isTranslucent = false
     }
     

@@ -241,3 +241,9 @@ extension DasherHomeController: DasherJobStatusControllerDelegate {
         tableController.tableView.reloadData()
     }
 }
+
+/*
+ - NEED
+    - listener to check for cancellation
+    - ON CANCEL -> JR is removed from tableController, and notification of cancellation is shown. Delete job 
+*/

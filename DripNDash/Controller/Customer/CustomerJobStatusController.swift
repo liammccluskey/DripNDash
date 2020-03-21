@@ -13,6 +13,8 @@ class CustomerJobStatusController: UIViewController {
     
     // MARK: - Properties
     
+    var delegate: CustomerJobStatusControllerDelegate?
+    
     var jobRequest: JobRequest!
     let jrf = JobRequestFirestore()
     var listener: ListenerRegistration!
@@ -112,7 +114,7 @@ class CustomerJobStatusController: UIViewController {
     
     let cancelButton: UIButton = {
         let button = UIButton(type: .system)
-        button.backgroundColor = .red
+        button.backgroundColor = .black
         button.setTitle("Cancel Request", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 20, weight: .semibold)
@@ -308,31 +310,16 @@ class CustomerJobStatusController: UIViewController {
                     print("CJSC.addListenerToJobRequest() Error: Document was empty)")
                     return
                 }
-                jobRequest.currentStage = data["CURRENT_STAGE"] as? Int ?? 0
-                self.updateStatusStackView(atStage: jobRequest.currentStage)
+                self.jobRequest = JobRequest.init(fromDocData: data)
+
+                // reload page data
+                self.updateStatusStackView(atStage: self.jobRequest.currentStage)
                 self.reloadJobInfoStackView()
+                
+                if self.jobRequest.currentStage == 9 {
+                    self.showJobCompleteAlert()
+                }
         }
-    }
-    
-    
-    
-    func showConfirmCancelAlert() {
-        let alert = UIAlertController(title: "Cancel This Request", message: "Are you sure you want to cancel this request?", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "No, don't cancel", style: .cancel, handler: nil))
-        alert.addAction(UIAlertAction(title: "Yes, cancel it", style: .default, handler: { (action) in
-            self.jobRequest.updateOnCustomerCancel()
-            self.jrf.updateOnCustomerCancel(jobRequest: self.jobRequest)
-            // notify tableController to remove this entry
-            // set dasher side listener to detect cancellation
-            
-        }))
-        present(alert, animated: true)
-    }
-    
-    func showCannotCancelAlert() {
-        let alert = UIAlertController(title: "Cannot Cancel Request", message: "Since a dasher has already picked up your laundry, your request is in progress and cannot be cancelled.", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Cancel Request", style: .cancel, handler: nil))
-        present(alert, animated: true)
     }
     
     // MARK: - Reload Page data
@@ -383,6 +370,63 @@ class CustomerJobStatusController: UIViewController {
         dasherRatingLabel.text? = "Dasher Rating: \(jobRequest.dasherRating!)"
         dasherNameLabel.text? = "Dasher Name: \(jobRequest.dasherName!)"
     }
+    
+    // MARK: - Job Cancel/Complete
+    
+    func didCancelJob() {
+        jobRequest.updateOnCustomerCancel()
+        jrf.updateOnCustomerCancel(jobRequest: jobRequest)
+        delegate?.didCancel(jobRequest: jobRequest)
+        
+        navigationController?.popViewController(animated: true)
+    }
+    
+    func showConfirmCancelAlert() {
+        let alert = UIAlertController(title: "Cancel This Request", message: "Are you sure you want to cancel this request?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "No, don't cancel", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "Yes, cancel it", style: .destructive, handler: { (action) in
+            self.didCancelJob()
+        }))
+        present(alert, animated: true)
+    }
+    
+    func showCannotCancelAlert() {
+        let alert = UIAlertController(title: "Cannot Cancel Request", message: "Since a dasher has already picked up your laundry, your request is in progress and cannot be cancelled.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Cancel Request", style: .cancel, handler: nil))
+        present(alert, animated: true)
+    }
+    
+    func didSubmitReview(rating: Double, review: String) {
+        jobRequest.updateOnCustomerReview(customerRating: rating, customerReview: review)
+        jrf.deleteJobRequest(jobRequest: jobRequest)
+        jrf.udpateCompletedJobOnCustomerReview(jobRequest: self.jobRequest)
+        delegate?.didComplete(jobRequest: jobRequest)
+        
+        navigationController?.popViewController(animated: true)
+    }
+    
+    func showJobCompleteAlert() {
+        let alert = UIAlertController(title: "Receipt", message: "Final Cost: $\(jobRequest.amountPaid!). Leave a review for the dasher below.", preferredStyle: .alert)
+        
+        alert.addTextField(configurationHandler: { textField in
+            textField.placeholder = "Star Rating (0-5)"
+            textField.keyboardType = .numberPad
+        })
+        alert.addTextField(configurationHandler: { textField in
+            textField.placeholder = "Written Review"
+        })
+        
+        alert.addAction(UIAlertAction(title: "Done", style: .default, handler: { action in
+            guard let customerRating = alert.textFields?[0].text,
+                let customerReview = alert.textFields?[1].text
+                else {return}
+            let rating = Double(customerRating)!
+            self.didSubmitReview(rating: rating, review: customerReview)
+        }))
+        
+        self.present(alert, animated: true)
+    }
+
     
     
 }

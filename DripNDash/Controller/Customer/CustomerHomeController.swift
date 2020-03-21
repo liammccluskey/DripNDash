@@ -299,6 +299,7 @@ class CustomerHomeController: UIViewController {
 extension CustomerHomeController: CustomerJobsTableControllerDelegate {
     func didSelectJob(jobRequest: JobRequest) {
         let controller = CustomerJobStatusController(jobRequest: jobRequest)
+        controller.delegate = self
         navigationController?.pushViewController(controller, animated: true)
     }
 }
@@ -326,6 +327,19 @@ extension CustomerHomeController: JobRequestFirestoreDelegate {
         }
         tableController.tableView.reloadData()
     }
-    
-    
+}
+
+extension CustomerHomeController: CustomerJobStatusControllerDelegate {
+    func didCancel(jobRequest: JobRequest) {
+        tableController.inProgressJobs.removeAll { (jr) -> Bool in
+            jr.jobID == jobRequest.jobID
+        }
+        tableController.tableView.reloadData()
+    }
+    func didComplete(jobRequest: JobRequest) {
+        tableController.inProgressJobs.removeAll { (jr) -> Bool in
+            jr.jobID == jobRequest.jobID
+        }
+        tableController.tableView.reloadData()
+    }
 }

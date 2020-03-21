@@ -271,7 +271,6 @@ class DasherJobStatusController: UIViewController {
         label.numberOfLines = 0
         label.font = .systemFont(ofSize: 18, weight: .semibold)
         label.backgroundColor = .clear
-        //label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }
     
@@ -286,13 +285,17 @@ class DasherJobStatusController: UIViewController {
     @objc func stageUpdateAction() {
         let updatedStage = jobRequest.currentStage + 1
         jobRequest.updateOnStageChange(toStage: updatedStage)
-        jrf.updateOnStageChange(jobRequest: jobRequest)
         
         reloadPageData()
         
+        if (0...8).contains(updatedStage) {
+            // stage update to JR must succeed write to jobsCompleted for stage=9
+            jrf.updateOnStageChange(jobRequest: jobRequest)
+        }
         if updatedStage == 7 {
             showFinalizeCostAlert()
         } else if updatedStage == 9 {
+            didCompleteJob()
             showJobCompletionAlert()
         }
     }
@@ -350,7 +353,7 @@ class DasherJobStatusController: UIViewController {
     func showJobCompletionAlert() {
         let alert = UIAlertController(title: "Job Complete", message: "You will receive $\(jobRequest.amountPaid!) for this job.", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
-            self.didCompleteJob()
+            self.navigationController?.popViewController(animated: true)
         }))
         
         present(alert, animated: true)
@@ -360,10 +363,8 @@ class DasherJobStatusController: UIViewController {
         jobRequest.udpateOnDasherCompletion(atTime: Timestamp(date: Date()))
         jrf.udpateOnDasherCompletion(jobRequest: jobRequest)
         jrf.writeCompletedJobOnDasherCompletion(jobRequest: jobRequest)
+        jrf.updateOnStageChange(jobRequest: jobRequest)
         
         delegate?.didComplete(jobRequest: jobRequest)
-        navigationController?.popViewController(animated: true)
-        
-        
     }
 }

@@ -44,5 +44,14 @@ protocol DasherJobStatusControllerDelegate {
     func didComplete(jobRequest: JobRequest)
 }
 
+protocol CustomerJobStatusControllerDelegate {
+/*
+     Conforms:
+     - CustomerHomeController: Tells CustomerJobsTableController to remove a JR obj
+*/
+    func didCancel(jobRequest: JobRequest)
+    func didComplete(jobRequest: JobRequest)
+}
+
 
 
