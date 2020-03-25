@@ -7,32 +7,7 @@
 //
 
 
-/*                              GENERAL_INFO
- 
-statusUpdateButtons =
- - STAGE_2 : On Way for Pickup
-    - PUSH_NOTIFICATION : Outside for Pickup
- - STAGE_3 : Picked Up Laundry
- - STAGE_4 : Laundry in Washer
- - STAGE_5 : Finished Washing
- - STAGE_6 : Laundry in Dryer
- - STAGE_7 : Finished Drying
- - STAGE_8 : On Way for Drop Off
-    - PUSH_NOTIFICATION: Outside for Drop Off
- - STAGE_9 : Dropped Off Laundry
- 
- let stages: [Int: String] = [
- /*
- During Stage -> After Stage Complete
- */
-     0: "Waiting for Dasher to Accept", 1: "Dasher Accepted Request",
-     2: "Dasher on Way for Pickup", 3: "Picked up Laundry,
-     4: "Laundry in Washer", 5: "Finished Washing",
-     6: "Laundry in Dryer", 7: "Finished Drying",
-     8: "Dasher On Way for Drop Off", 9: "Dropped off Laundry"
- ]
 
-*/
 import UIKit
 import Firebase
 
@@ -41,9 +16,11 @@ class DasherJobStatusController: UIViewController {
     // MARK: - Properties
     
     var delegate: DasherJobStatusControllerDelegate?
+    var listener: ListenerRegistration!
     
     var jobRequest: JobRequest!
     let jrf = JobRequestFirestore()
+    let df = DasherFirestore()
     
     let jobInfoView: UIView = {
         let view = UIView()
@@ -136,6 +113,8 @@ class DasherJobStatusController: UIViewController {
         setUpAutoLayout()
         
         reloadPageData()
+        
+        addListenerToJobRequest(jobRequest: jobRequest)
     }
     
     init(jobRequest: JobRequest) {
@@ -146,6 +125,10 @@ class DasherJobStatusController: UIViewController {
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        delegate?.didUpdate(jobRequest: jobRequest)
     }
     
     // MARK: - Config
@@ -320,10 +303,56 @@ class DasherJobStatusController: UIViewController {
             button.backgroundColor = .blue
         }
         
-        
         guard let nextStageButton = stageUpdateButtons[jobRequest.currentStage+1] else {return}
         nextStageButton.isEnabled = true
         
+        if jobRequest.wasCancelled {
+            showJobCancellationAlert()
+        }
+        
+    }
+    
+    func didCompleteJob() {
+        jobRequest.udpateOnDasherCompletion(atTime: Timestamp(date: Date()))
+        jrf.udpateOnDasherCompletion(jobRequest: jobRequest)
+        jrf.writeCompletedJobOnDasherCompletion(jobRequest: jobRequest)
+        jrf.updateOnStageChange(jobRequest: jobRequest)
+        
+        df.addCompletedJob(jobID: jobRequest.jobID, forDasherUID: jobRequest.dasherUID)
+        
+        delegate?.didComplete(jobRequest: jobRequest)
+    }
+    
+    func addListenerToJobRequest(jobRequest: JobRequest) {
+        let inProgressDocRef = Firestore.firestore().collection("jobsInProgress")
+            .document(jobRequest.jobID)
+        listener =
+            inProgressDocRef.addSnapshotListener { documentSnapshot, error in
+                guard let document = documentSnapshot else {
+                    print("DJTC.addListenerToJobRequest() Error: \(error!)")
+                    return
+                }
+                guard let data = document.data() else {
+                    print("DJTC.addListenerToJobRequest() Error: Document was empty)")
+                    return
+                }
+                let updatedJobRequest = JobRequest(fromDocData: data)
+                if updatedJobRequest.wasCancelled {
+                    self.showJobCancellationAlert()
+                }
+        }
+    }
+    
+    // MARK: - Alerts
+    
+    func showJobCancellationAlert() {
+        let alert = UIAlertController(title: "Job Cancelled", message: "The customer has cancelled this request", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
+            self.delegate?.didComplete(jobRequest: self.jobRequest)
+            self.navigationController?.popViewController(animated: true)
+        }))
+        
+        present(alert, animated: true)
     }
     
     func showFinalizeCostAlert() {
@@ -357,14 +386,5 @@ class DasherJobStatusController: UIViewController {
         }))
         
         present(alert, animated: true)
-    }
-    
-    func didCompleteJob() {
-        jobRequest.udpateOnDasherCompletion(atTime: Timestamp(date: Date()))
-        jrf.udpateOnDasherCompletion(jobRequest: jobRequest)
-        jrf.writeCompletedJobOnDasherCompletion(jobRequest: jobRequest)
-        jrf.updateOnStageChange(jobRequest: jobRequest)
-        
-        delegate?.didComplete(jobRequest: jobRequest)
     }
 }

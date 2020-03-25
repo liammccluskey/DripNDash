@@ -13,7 +13,7 @@ class DasherFirestore {
     // MARK: - Properties
     
     var delegate: DasherFirestoreDelegate?
-    
+    let db = Firestore.firestore()
     let dashersRef = Firestore.firestore().collection("dashers")
     
     // MARK: - Init
@@ -88,5 +88,56 @@ class DasherFirestore {
         }
     }
     
+    // MARK: - Profile Updates
+    
+    func addCompletedJob(jobID: String, forDasherUID uid: String) {
+        let docRef = dashersRef.document(uid)
+        docRef.updateData([
+            "COMPLETED_JOBS": FieldValue.arrayUnion([jobID])
+            ])
+    }
+    
+    func updateRating(ofDasherUID uid: String, withRating rating: Double) {
+        let docRef = dashersRef.document(uid)
+        db.runTransaction({ (transaction, errorPointer) -> Any? in
+            let doc: DocumentSnapshot
+            do {
+                try doc = transaction.getDocument(docRef)
+            } catch let fetchError as NSError {
+                errorPointer?.pointee = fetchError
+                return nil
+            }
+            guard let oldRating = doc.data()?["RATING"] as? Double else {
+                let error = NSError(
+                    domain: "AppErrorDomain",
+                    code: -1,
+                    userInfo: [
+                        NSLocalizedDescriptionKey: "Unable to fetch RATING field from \(doc)"
+                    ])
+                errorPointer?.pointee = error
+                return nil
+            }
+            guard let oldNumJobs = doc.data()?["NUM_JOBS_COMPLETED"] as? Double else {
+                let error = NSError(
+                    domain: "AppErrorDomain",
+                    code: -1,
+                    userInfo: [
+                        NSLocalizedDescriptionKey: "Unable to fetch NUM_JOBS_COMPLETED field data from \(doc)"
+                    ])
+                errorPointer?.pointee = error
+                return nil
+            }
+            let newRating: Double = (rating + oldRating*oldNumJobs)/(oldNumJobs + 1)
+            transaction.updateData([
+                "RATING": newRating,
+                "NUM_JOBS_COMPLETED": FieldValue.increment(Int64(1))
+            ], forDocument: docRef)
+            return nil
+        }) { (object, error) in
+            if let error = error {
+                print("DasherFirestore.updateRating() Error: Transaction failed with \(error)")
+            }
+        }
+    }
 }
 

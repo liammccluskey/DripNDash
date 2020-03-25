@@ -70,4 +70,13 @@ class CustomerFirestore {
             }
         }
     }
+    
+    // MARK: - Profile Updates
+    
+    func addCompletedJob(jobID: String, forCustomerUID uid: String) {
+        let docRef = customersRef.document(uid)
+        docRef.updateData([
+            "COMPLETED_JOBS": FieldValue.arrayUnion([jobID])
+        ])
+    }
 }

@@ -17,6 +17,8 @@ class CustomerJobStatusController: UIViewController {
     
     var jobRequest: JobRequest!
     let jrf = JobRequestFirestore()
+    let cf = CustomerFirestore()
+    let df = DasherFirestore()
     var listener: ListenerRegistration!
     let db = Firestore.firestore()
     
@@ -317,12 +319,24 @@ class CustomerJobStatusController: UIViewController {
                 self.reloadJobInfoStackView()
                 
                 if self.jobRequest.currentStage == 9 {
+                    self.didCompleteJob()
                     self.showJobCompleteAlert()
                 }
         }
     }
     
-    // MARK: - Reload Page data
+    // MARK: - Reload Page Data
+    
+    func reloadStatusStackView() {
+        for i in 0...jobRequest.currentStage {
+            updateStatusStackView(atStage: i)
+        }
+    }
+    
+    func reloadJobInfoStackView() {
+        dasherRatingLabel.text? = "Dasher Rating: \(jobRequest.dasherRating!)"
+        dasherNameLabel.text? = "Dasher Name: \(jobRequest.dasherName!)"
+    }
     
     func updateStatusStackView(atStage stage: Int) {
         let step: Int = stage/2
@@ -355,23 +369,9 @@ class CustomerJobStatusController: UIViewController {
         let newStageView = stageViews[step]![subStage]!
         currentStageView.removeFromSuperview()
         statusStackView.insertArrangedSubview(newStageView, at: step)
-        
-        print("Updated for Step: \(step)")
-        print("Updated for SubStage: \(subStage)")
     }
     
-    func reloadStatusStackView() {
-        for i in 0...jobRequest.currentStage {
-            updateStatusStackView(atStage: i)
-        }
-    }
-    
-    func reloadJobInfoStackView() {
-        dasherRatingLabel.text? = "Dasher Rating: \(jobRequest.dasherRating!)"
-        dasherNameLabel.text? = "Dasher Name: \(jobRequest.dasherName!)"
-    }
-    
-    // MARK: - Job Cancel/Complete
+    // MARK: - Database Interface Events
     
     func didCancelJob() {
         jobRequest.updateOnCustomerCancel()
@@ -380,6 +380,23 @@ class CustomerJobStatusController: UIViewController {
         
         navigationController?.popViewController(animated: true)
     }
+    
+    func didCompleteJob() {
+        jrf.deleteJobRequest(jobRequest: jobRequest)
+        cf.addCompletedJob(jobID: jobRequest.jobID, forCustomerUID: jobRequest.customerUID)
+    }
+    
+    func didSubmitReview(rating: Double, review: String) {
+        jobRequest.updateOnCustomerReview(customerRating: rating, customerReview: review)
+        jrf.udpateCompletedJobOnCustomerReview(jobRequest: self.jobRequest)
+        df.updateRating(ofDasherUID: jobRequest.dasherUID, withRating: rating)
+        delegate?.didComplete(jobRequest: jobRequest)
+        
+        navigationController?.popViewController(animated: true)
+    }
+    
+    
+    // MARK: - Alerts
     
     func showConfirmCancelAlert() {
         let alert = UIAlertController(title: "Cancel This Request", message: "Are you sure you want to cancel this request?", preferredStyle: .alert)
@@ -392,17 +409,8 @@ class CustomerJobStatusController: UIViewController {
     
     func showCannotCancelAlert() {
         let alert = UIAlertController(title: "Cannot Cancel Request", message: "Since a dasher has already picked up your laundry, your request is in progress and cannot be cancelled.", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Cancel Request", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "Okay", style: .cancel, handler: nil))
         present(alert, animated: true)
-    }
-    
-    func didSubmitReview(rating: Double, review: String) {
-        jobRequest.updateOnCustomerReview(customerRating: rating, customerReview: review)
-        jrf.deleteJobRequest(jobRequest: jobRequest)
-        jrf.udpateCompletedJobOnCustomerReview(jobRequest: self.jobRequest)
-        delegate?.didComplete(jobRequest: jobRequest)
-        
-        navigationController?.popViewController(animated: true)
     }
     
     func showJobCompleteAlert() {

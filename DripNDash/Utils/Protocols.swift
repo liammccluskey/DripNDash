@@ -42,6 +42,7 @@ protocol DasherJobStatusControllerDelegate {
      - DasherHomeController: Tells DasherJobsTableController to remove a JR obj
 */
     func didComplete(jobRequest: JobRequest)
+    func didUpdate(jobRequest: JobRequest)
 }
 
 protocol CustomerJobStatusControllerDelegate {

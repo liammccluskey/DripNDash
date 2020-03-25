@@ -180,7 +180,7 @@ class DasherHomeController: UIViewController {
         requestActionHelper()
     }
     
-    // MARK: - Helper
+    // MARK: - Job Cancellation
     
     
     
@@ -221,6 +221,7 @@ extension DasherHomeController: DasherJobNotificationDelegate {
         jrf.updateOnAssignmentAccept(jobRequest: jobRequest)
         
         tableController.inProgressJobs.append(jobRequest)
+        tableController.addListenerToJobRequest(jobRequest: jobRequest)
         tableController.tableView.reloadData()
     }
 }
@@ -240,10 +241,15 @@ extension DasherHomeController: DasherJobStatusControllerDelegate {
         }
         tableController.tableView.reloadData()
     }
+    func didUpdate(jobRequest: JobRequest) {
+        for i in 0..<tableController.inProgressJobs.count {
+            let jr = tableController.inProgressJobs[i]
+            print("tempJobRequest_ID: \(jr.jobID)")
+            if jr.jobID == jobRequest.jobID {
+                tableController.inProgressJobs[i] = jobRequest
+                print("JRFDelegate.sendUpdatedJobRequest(): did update corresponding JR")
+            }
+        }
+        tableController.tableView.reloadData()
+    }
 }
-
-/*
- - NEED
-    - listener to check for cancellation
-    - ON CANCEL -> JR is removed from tableController, and notification of cancellation is shown. Delete job 
-*/
