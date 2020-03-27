@@ -23,19 +23,29 @@ class CustomerTabBarController: UITabBarController {
     // MARK: - Config
     
     func configureTabBar() {
-        let homeController = UINavigationController(rootViewController: CustomerHomeController())
+        let homeController = CustomerHomeController()
+        let jobHistoryController = CustomerJobHistoryController()
+        let settingsController = CustomerSettingsController()
+        
+        let controller1 = UINavigationController(rootViewController: homeController)
         homeController.tabBarItem.image = #imageLiteral(resourceName: "ic_person_outline_white_2x")
-        let settingsController = UINavigationController(rootViewController: CustomerSettingsController())
+        let controller2 = UINavigationController(rootViewController: jobHistoryController)
+        jobHistoryController.tabBarItem.image = #imageLiteral(resourceName: "ic_menu_white_3x")
+        let controller3 = UINavigationController(rootViewController: settingsController)
         settingsController.tabBarItem.image = #imageLiteral(resourceName: "baseline_settings_white_24dp")
-        viewControllers = [homeController, settingsController]
+        
+        
+        viewControllers = [controller1, controller2, controller3]
+        
+        
         
         // black bar with white items
         //tabBar.barTintColor = .black
         //tabBar.tintColor = .white
         
         // white bar with black items
-        //tabBar.barTintColor = .white
-        //tabBar.tintColor = .black
+        tabBar.barTintColor = .white
+        tabBar.tintColor = .black
         
         tabBar.isTranslucent = false
     }

@@ -14,7 +14,7 @@ class CustomerHomeController: UIViewController {
     
     // MARK: - Test Properties
     
-    var jobRequestFirestore: JobRequestFirestore!
+    var jobRequestFirestore = JobRequestFirestore()
     var customer: Customer!
     var inProgressJobs: [JobRequest] = []
     
@@ -135,7 +135,7 @@ class CustomerHomeController: UIViewController {
         setUpAutoLayout()
         
         setCustomer()
-        setJobRequestFirestore()
+        //setJobRequestFirestore()
     }
     
     func setCustomer() {
@@ -144,11 +144,12 @@ class CustomerHomeController: UIViewController {
         customerFirestore.delegate = self
         customerFirestore.getCustomer(uid: uid!)
     }
-    
+/*
     func setJobRequestFirestore() {
         jobRequestFirestore = JobRequestFirestore()
         jobRequestFirestore.delegate = self
     }
+*/
     
     // MARK: - Configure
     
@@ -309,12 +310,12 @@ extension CustomerHomeController: CustomerFirestoreDelegate {
         self.customer = customer
     }
 }
-
+/*
 extension CustomerHomeController: JobRequestFirestoreDelegate {
     func sendJobRequest(jobRequest: JobRequest) {
         // This method handles Dasher side
     }
-    
+/*
     func sendUpdatedJobRequest(jobRequest: JobRequest) {
         print("jobRequest_ID: \(jobRequest.jobID)")
         for i in 0..<tableController.inProgressJobs.count {
@@ -327,7 +328,12 @@ extension CustomerHomeController: JobRequestFirestoreDelegate {
         }
         tableController.tableView.reloadData()
     }
+*/
+    func sendCompletedJobs(jobRequests: [JobRequest]) {
+    
+    }
 }
+ */
 
 extension CustomerHomeController: CustomerJobStatusControllerDelegate {
     func didCancel(jobRequest: JobRequest) {
@@ -341,5 +347,7 @@ extension CustomerHomeController: CustomerJobStatusControllerDelegate {
             jr.jobID == jobRequest.jobID
         }
         tableController.tableView.reloadData()
+        tableController.listeners.removeValue(forKey: jobRequest.jobID)
     }
 }
+

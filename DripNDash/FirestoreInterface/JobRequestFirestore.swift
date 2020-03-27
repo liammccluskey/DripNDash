@@ -179,7 +179,7 @@ class JobRequestFirestore {
     
     // MARK: - Helpers
     
-    func getInProgressJobRequest(fromDocumentID documentID: String) {
+    private func getInProgressJobRequest(fromDocumentID documentID: String) {
     /*
          Caller: self.getOldestJobRequest()
     */
@@ -200,12 +200,68 @@ class JobRequestFirestore {
         }
     }
     
-    func updateJobRequest(jobRequest: JobRequest, fields: [AnyHashable: Any]) {
+    private func updateJobRequest(jobRequest: JobRequest, fields: [AnyHashable: Any]) {
         let inProgressDocRef = db.collection("jobsInProgress")
             .document(jobRequest.jobID)
         inProgressDocRef.updateData(fields) { (error) in
             if let error = error {
                 print("JobRequestFirestore.updateJobRequest() Error: \(error)")
+            }
+        }
+    }
+    
+    // MARK: - Completed Jobs
+    
+    func getCompletedJobs(forUserType userType: String, withUID uid: String) {
+        let userDocRef = db.collection("\(userType)s")
+            .document(uid)
+        let completedJobsCollectionRef = db.collection("jobsCompleted")
+        db.runTransaction({ (transaction, errorPointer) -> Any? in
+            let userDoc: DocumentSnapshot
+            do {
+                try userDoc = transaction.getDocument(userDocRef)
+            } catch let fetchError as NSError {
+                errorPointer?.pointee = fetchError
+                return nil
+            }
+            guard let jobIDs = userDoc.data()?["COMPLETED_JOBS"] as? [String] else {
+                let error = NSError(
+                    domain: "AppErrorDomain",
+                    code: -1,
+                    userInfo: [
+                        NSLocalizedDescriptionKey: "Unable to fetch COMPLETED_JOBS field from doc: \(userType)/\(uid)"
+                    ])
+                errorPointer?.pointee = error
+                return nil
+            }
+            var jobRequests: [JobRequest] = []
+            var jobDoc: DocumentSnapshot
+
+            for jobID in jobIDs {
+                do {
+                    try jobDoc = transaction.getDocument(completedJobsCollectionRef.document(jobID))
+                } catch let fetchError as NSError {
+                    errorPointer?.pointee = fetchError
+                    return nil
+                }
+                guard let jobDocData = jobDoc.data() else {
+                    let error = NSError(
+                        domain: "AppErrorDomain",
+                        code: -1,
+                        userInfo: [
+                            NSLocalizedDescriptionKey: "JobRequest document with jobID: \(jobID) was empty"
+                        ])
+                    errorPointer?.pointee = error
+                    return nil
+                }
+                let jobRequest = JobRequest(fromDocData: jobDocData)
+                jobRequests.append(jobRequest)
+            }
+            self.delegate?.sendCompletedJobs(jobRequests: jobRequests)
+            return nil
+        }) { (object, error) in
+            if let error = error {
+                print("JobRequestFirestore.getCompletedJobs() Error: Transaction failed with \(error)")
             }
         }
     }

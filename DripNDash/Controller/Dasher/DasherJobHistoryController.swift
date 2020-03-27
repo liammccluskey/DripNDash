@@ -1,14 +1,14 @@
 //
-//  CustomerJobHistoryController.swift
+//  DasherJobHistoryController.swift
 //  DripNDash
 //
-//  Created by Marty McCluskey on 2/16/20.
+//  Created by Marty McCluskey on 3/26/20.
 //  Copyright © 2020 Liam McCluskey. All rights reserved.
 //
 
 import UIKit
 
-class CustomerJobHistoryController: UIViewController {
+class DasherJobHistoryController: UIViewController {
     
     // MARK: - Properties
     
@@ -20,7 +20,7 @@ class CustomerJobHistoryController: UIViewController {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-
+    
     var tableController: JobHistoryTableController!
     
     // MARK: - Init
@@ -42,7 +42,7 @@ class CustomerJobHistoryController: UIViewController {
         view.addSubview(historyView)
         
         view.backgroundColor = .white
-        title = "Past Requests"
+        title = "Past Jobs"
     }
     
     func setUpAutoLayout(){
@@ -67,7 +67,7 @@ class CustomerJobHistoryController: UIViewController {
         navigationController?.navigationBar.isTranslucent = false
         navigationController?.navigationBar.barStyle = .default
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Reload", style: .plain, target: self, action: #selector(reloadTableData))
-        navigationItem.title = "Past Requests"
+        navigationItem.title = "Past Jobs"
     }
     
     // MARK: - Selectors
@@ -77,9 +77,8 @@ class CustomerJobHistoryController: UIViewController {
     }
 }
 
-extension CustomerJobHistoryController: JobHistoryTableControllerDelegate {
+extension DasherJobHistoryController: JobHistoryTableControllerDelegate {
     func didSelectJob(jobRequest: JobRequest) {
-        let controller = CustomerJobInfoController(completedJob: jobRequest)
-        navigationController?.pushViewController(controller, animated: true)
+        
     }
 }

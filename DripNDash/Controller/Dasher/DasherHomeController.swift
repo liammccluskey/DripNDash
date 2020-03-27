@@ -12,8 +12,10 @@ import Firebase
 class DasherHomeController: UIViewController {
     
     // MARK: - Properties
-        
+    
     var dasher: Dasher!
+    let df = DasherFirestore()
+    let jrf = JobRequestFirestore()
     
     let statusView: UIView = {
         let view = UIView()
@@ -66,17 +68,18 @@ class DasherHomeController: UIViewController {
         setUpAutoLayout()
         
         setDasher()
+        
+        jrf.delegate = self
+        df.delegate = self
     }
     
     func setDasher() {
-        if let uid = Auth.auth().currentUser?.uid {
-            let dasherFirestore = DasherFirestore()
-            dasherFirestore.delegate = self
-            dasherFirestore.getDasher(uid: uid)
-        } else {
+        guard let uid = Auth.auth().currentUser?.uid else {
             print("DasherHomeController Error: uid is nil")
+            return
         }
-        
+        df.getDasher(uid: uid)
+        df.addListenerToDasher(withUID: uid)
     }
     
     // MARK: - Configure
@@ -138,52 +141,24 @@ class DasherHomeController: UIViewController {
     // MARK: - Selectors
     
     @objc func requestAction() {
-        let jobRequestFirestore = JobRequestFirestore()
-        jobRequestFirestore.delegate = self
         if dasher != nil {
-            jobRequestFirestore.getOldestJobRequest(availableToDasher: dasher)
+            jrf.getOldestJobRequest(availableToDasher: dasher)
         } else {
             print("DasherHomeController.requestAction() Error: dasher was nil")
         }
-        
-        
-        print("ran DasherHomeController.requestAction()")
     }
     
     func requestActionHelper() {
-        print("ran DasherHomeController.requestAction()")
-        
-        let jobRequestFirestore = JobRequestFirestore()
-        jobRequestFirestore.delegate = self
         if dasher != nil {
-            jobRequestFirestore.getOldestJobRequest(availableToDasher: dasher)
+            jrf.getOldestJobRequest(availableToDasher: dasher)
         } else {
             print("DasherHomeController Error: dasher is nil")
-            let uid = "FAILED_ATTEMPT: Dasher was nil"
-            let dasherTemp = Dasher(
-                uid: uid,
-                firstName: "error_name",
-                lastName: "error_name",
-                email: "dripndashDeveloper@gmail.com",
-                dorm: "error_dorm",
-                dormRoom: 101,
-                rating: 100,
-                numCompletedJobs: 100,
-                registerTimestamp: Timestamp(date: Date()),
-                completedJobs: []
-            )
-            jobRequestFirestore.getOldestJobRequest(availableToDasher: dasherTemp)
         }
     }
     
     @objc func historyAction() {
         requestActionHelper()
     }
-    
-    // MARK: - Job Cancellation
-    
-    
-    
 }
 
 extension DasherHomeController: JobRequestFirestoreDelegate {
@@ -194,8 +169,7 @@ extension DasherHomeController: JobRequestFirestoreDelegate {
         controller.delegate = self
         present(controller, animated: true)
     }
-    
-    func sendUpdatedJobRequest(jobRequest: JobRequest) {
+    func sendCompletedJobs(jobRequests: [JobRequest]) {
     }
 }
 
@@ -217,7 +191,6 @@ extension DasherHomeController: DasherJobNotificationDelegate {
     
     func didAccept(jobRequest: JobRequest) {
         jobRequest.updateOnAssignment(toDasher: dasher, atTime: Timestamp(date: Date()))
-        let jrf = JobRequestFirestore()
         jrf.updateOnAssignmentAccept(jobRequest: jobRequest)
         
         tableController.inProgressJobs.append(jobRequest)
@@ -240,6 +213,7 @@ extension DasherHomeController: DasherJobStatusControllerDelegate {
             jr.jobID == jobRequest.jobID
         }
         tableController.tableView.reloadData()
+        tableController.listeners.removeValue(forKey: jobRequest.jobID)
     }
     func didUpdate(jobRequest: JobRequest) {
         for i in 0..<tableController.inProgressJobs.count {
@@ -247,7 +221,7 @@ extension DasherHomeController: DasherJobStatusControllerDelegate {
             print("tempJobRequest_ID: \(jr.jobID)")
             if jr.jobID == jobRequest.jobID {
                 tableController.inProgressJobs[i] = jobRequest
-                print("JRFDelegate.sendUpdatedJobRequest(): did update corresponding JR")
+                print("DJSCD_Delegate.didUpdate(): did update corresponding JR")
             }
         }
         tableController.tableView.reloadData()

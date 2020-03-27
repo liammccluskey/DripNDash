@@ -23,11 +23,19 @@ class DasherTabBarController: UITabBarController {
     // MARK: - Config
     
     func configureTabBar() {
-        let homeController = UINavigationController(rootViewController: DasherHomeController())
+        let homeController = DasherHomeController()
+        let jobHistoryController = DasherJobHistoryController()
+        let settingsController = DasherSettingsController()
+        
+        let controller1 = UINavigationController(rootViewController: homeController)
         homeController.tabBarItem.image = #imageLiteral(resourceName: "ic_person_outline_white_2x")
-        let settingsController = UINavigationController(rootViewController: DasherSettingsController())
+        let controller2 = UINavigationController(rootViewController: jobHistoryController)
+        jobHistoryController.tabBarItem.image = #imageLiteral(resourceName: "ic_menu_white_3x")
+        let controller3 = UINavigationController(rootViewController: settingsController)
         settingsController.tabBarItem.image = #imageLiteral(resourceName: "baseline_settings_white_24dp")
-        viewControllers = [homeController, settingsController]
+        
+        
+        viewControllers = [controller1, controller2, controller3]
         
         // white bar with black items
         tabBar.barTintColor = .white

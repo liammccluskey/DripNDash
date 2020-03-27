@@ -60,31 +60,16 @@ class DasherFirestore {
         print("ran DasherFirestore.getDasher()")
         let docRef = dashersRef.document(uid)
         docRef.getDocument { (document, error) in
-            if let document = document {
-                guard let docData = document.data() else {
-                    print("DasherFirestore.getDasher(): dasher document data was nil")
-                    return
-                }
-                let dasher = Dasher(
-                    uid: uid,
-                    firstName: docData["FIRST_NAME"] as! String,
-                    lastName: docData["LAST_NAME"] as! String,
-                    email: docData["EMAIL"] as! String,
-                    dorm: docData["DORM"] as! String,
-                    dormRoom: docData["DORM_ROOM"] as! Int,
-                    rating: docData["RATING"] as! Double,
-                    numCompletedJobs: docData["NUM_COMPLETED_JOBS"] as! Int,
-                    registerTimestamp: docData["REGISTER_TIMESTAMP"] as! Timestamp,
-                    completedJobs: docData["COMPLETED_JOBS"] as! [String]
-                )
-                self.delegate?.sendDasher(dasher: dasher)
-                print("DasherFirestore.getDasher(): sent dasher")
-            } else {
-                // TODO: HANDLE_ERROR
-                guard let error = error else {return}
-                print("DasherFirestore.getDasher() Error: \(error)")
-                self.delegate?.sendDasher(dasher: nil)
+            guard let document = document else {
+                print("DasherFirestore.getDasher() Error: \(error!)")
+                return
             }
+            guard let data = document.data() else {
+                print("DasherFirestore.getDasher() Error: Document was empty)")
+                return
+            }
+            let dasher = Dasher(fromDocData: data)
+            self.delegate?.sendDasher(dasher: dasher)
         }
     }
     
@@ -117,12 +102,12 @@ class DasherFirestore {
                 errorPointer?.pointee = error
                 return nil
             }
-            guard let oldNumJobs = doc.data()?["NUM_JOBS_COMPLETED"] as? Double else {
+            guard let oldNumJobs = doc.data()?["NUM_COMPLETED_JOBS"] as? Double else {
                 let error = NSError(
                     domain: "AppErrorDomain",
                     code: -1,
                     userInfo: [
-                        NSLocalizedDescriptionKey: "Unable to fetch NUM_JOBS_COMPLETED field data from \(doc)"
+                        NSLocalizedDescriptionKey: "Unable to fetch NUM_COMPLETED_JOBS field data from \(doc)"
                     ])
                 errorPointer?.pointee = error
                 return nil
@@ -130,7 +115,7 @@ class DasherFirestore {
             let newRating: Double = (rating + oldRating*oldNumJobs)/(oldNumJobs + 1)
             transaction.updateData([
                 "RATING": newRating,
-                "NUM_JOBS_COMPLETED": FieldValue.increment(Int64(1))
+                "NUM_COMPLETED_JOBS": FieldValue.increment(Int64(1))
             ], forDocument: docRef)
             return nil
         }) { (object, error) in
@@ -139,5 +124,25 @@ class DasherFirestore {
             }
         }
     }
+    
+    // MARK: Realtime Changes
+    
+    func addListenerToDasher(withUID uid: String) {
+        let docRef = dashersRef.document(uid)
+        docRef.addSnapshotListener { (documentSnapshot, error) in
+            guard let document = documentSnapshot else {
+                print("DasherFirestore.addListenerToDasher() Error: \(error!)")
+                return
+            }
+            guard let data = document.data() else {
+                print("DasherFirestore.addListenerToDasher() Error: Document was empty)")
+                return
+            }
+            let dasher = Dasher(fromDocData: data)
+            self.delegate?.sendDasher(dasher: dasher)
+        }
+    }
+    
+    
 }
 

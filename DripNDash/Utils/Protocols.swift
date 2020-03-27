@@ -28,7 +28,8 @@ protocol DasherFirestoreDelegate {
 
 protocol JobRequestFirestoreDelegate {
     func sendJobRequest(jobRequest: JobRequest)
-    func sendUpdatedJobRequest(jobRequest: JobRequest)
+    //func sendUpdatedJobRequest(jobRequest: JobRequest)
+    func sendCompletedJobs(jobRequests: [JobRequest])
 }
 
 protocol DasherJobNotificationDelegate {
@@ -53,6 +54,16 @@ protocol CustomerJobStatusControllerDelegate {
     func didCancel(jobRequest: JobRequest)
     func didComplete(jobRequest: JobRequest)
 }
+
+protocol JobHistoryTableControllerDelegate {
+/*
+     Conforms:
+     - CustomerJobHistoryController
+     - DasherJobHistoryController
+*/
+    func didSelectJob(jobRequest: JobRequest)
+}
+
 
 
 

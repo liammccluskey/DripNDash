@@ -143,7 +143,7 @@ class JobRequest {
         self.customerName = docData["CUSTOMER_NAME"] as! String
         self.customerInstructions = docData["CUSTOMER_INSTRUCTIONS"] as! String
         
-        self.currentStage = docData["CURRENT_STAGE"] as! Int
+        self.currentStage = docData["CURRENT_STAGE"] as? Int ?? -1
         
         self.assignedTimestamp = docData["ASSIGNED_TIMESTAMP"] as? Timestamp ?? Timestamp(date: Date())
         self.dasherUID = docData["DASHER_UID"] as? String ?? ""
@@ -156,7 +156,7 @@ class JobRequest {
         
         self.completedTimestamp = docData["COMPLETED_TIMESTAMP"] as? Timestamp ?? Timestamp(date: Date())
         
-        self.wasCancelled = docData["WAS_CANCELLED"] as! Bool
+        self.wasCancelled = docData["WAS_CANCELLED"] as? Bool ?? false
         
         // only relevant to JR objs in jobsCompleted collection
         self.customerRating = docData["CUSTOMER_RATING"] as? Double ?? -1
@@ -223,6 +223,12 @@ class JobRequest {
     
     func estimatedTotalCost(forNumLoads numLoads: Int) -> Double {
         return Double(numLoads)*1.50*2.0 + 5.0 + 2.0
+    }
+    
+    func getDateTime() -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "d MMM y, HH:mm"
+        return formatter.string(from: assignedTimestamp.dateValue())
     }
 }
 

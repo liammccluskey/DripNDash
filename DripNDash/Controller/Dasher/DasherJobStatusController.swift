@@ -16,8 +16,8 @@ class DasherJobStatusController: UIViewController {
     // MARK: - Properties
     
     var delegate: DasherJobStatusControllerDelegate?
+   
     var listener: ListenerRegistration!
-    
     var jobRequest: JobRequest!
     let jrf = JobRequestFirestore()
     let df = DasherFirestore()
@@ -319,6 +319,8 @@ class DasherJobStatusController: UIViewController {
         jrf.updateOnStageChange(jobRequest: jobRequest)
         
         df.addCompletedJob(jobID: jobRequest.jobID, forDasherUID: jobRequest.dasherUID)
+        
+        listener.remove()
         
         delegate?.didComplete(jobRequest: jobRequest)
     }
