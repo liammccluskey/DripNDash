@@ -79,6 +79,7 @@ class DasherJobHistoryController: UIViewController {
 
 extension DasherJobHistoryController: JobHistoryTableControllerDelegate {
     func didSelectJob(jobRequest: JobRequest) {
-        
+        let controller = DasherJobInfoController(completedJob: jobRequest)
+        navigationController?.pushViewController(controller, animated: true)
     }
 }

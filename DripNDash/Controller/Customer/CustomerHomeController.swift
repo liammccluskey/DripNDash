@@ -9,7 +9,6 @@
 import UIKit
 import Firebase
 
-// without subview portions
 class CustomerHomeController: UIViewController {
     
     // MARK: - Test Properties
@@ -135,7 +134,6 @@ class CustomerHomeController: UIViewController {
         setUpAutoLayout()
         
         setCustomer()
-        //setJobRequestFirestore()
     }
     
     func setCustomer() {
@@ -144,12 +142,6 @@ class CustomerHomeController: UIViewController {
         customerFirestore.delegate = self
         customerFirestore.getCustomer(uid: uid!)
     }
-/*
-    func setJobRequestFirestore() {
-        jobRequestFirestore = JobRequestFirestore()
-        jobRequestFirestore.delegate = self
-    }
-*/
     
     // MARK: - Configure
     
@@ -310,30 +302,6 @@ extension CustomerHomeController: CustomerFirestoreDelegate {
         self.customer = customer
     }
 }
-/*
-extension CustomerHomeController: JobRequestFirestoreDelegate {
-    func sendJobRequest(jobRequest: JobRequest) {
-        // This method handles Dasher side
-    }
-/*
-    func sendUpdatedJobRequest(jobRequest: JobRequest) {
-        print("jobRequest_ID: \(jobRequest.jobID)")
-        for i in 0..<tableController.inProgressJobs.count {
-            let jr = tableController.inProgressJobs[i]
-            print("tempJobRequest_ID: \(jr.jobID)")
-            if jr.jobID == jobRequest.jobID {
-                tableController.inProgressJobs[i] = jobRequest
-                print("JRFDelegate.sendUpdatedJobRequest(): did update corresponding JR")
-            }
-        }
-        tableController.tableView.reloadData()
-    }
-*/
-    func sendCompletedJobs(jobRequests: [JobRequest]) {
-    
-    }
-}
- */
 
 extension CustomerHomeController: CustomerJobStatusControllerDelegate {
     func didCancel(jobRequest: JobRequest) {

@@ -109,7 +109,7 @@ class CustomerJobInfoController: UIViewController {
         // Job Info Portion
         dateLabel = configureInfoLabel(keyLabel: "Date", valueLabel: completedJob.getDateTime())
         dasherNameLabel = configureInfoLabel(keyLabel: "Dasher Name", valueLabel: completedJob.dasherName)
-        customerRatingLabel = configureInfoLabel(keyLabel: "Rating You Left", valueLabel: String(completedJob.customerRating))
+        customerRatingLabel = configureInfoLabel(keyLabel: "Rating You Left", valueLabel: String(completedJob.customerRatingContext))
         customerReviewLabel = configureInfoLabel(keyLabel: "Review You Left", valueLabel: completedJob.customerReview)
         estimatedNumLoadsLabel = configureInfoLabel(keyLabel: "Estimated Number of Loads", valueLabel: String(completedJob.numLoadsEstimate))
         instructionsLabel = configureInfoLabel(keyLabel: "Your Instructions", valueLabel: completedJob.customerInstructions)

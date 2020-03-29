@@ -6,12 +6,6 @@
 //  Copyright © 2020 Liam McCluskey. All rights reserved.
 //
 
-/* TODO: define requirements for info needed for full status page
- Requirements for show dasher Profile:
- - Attributes: Name, Rating, Reviews, Photo,
- s
-*/
-
 import Firebase
 
 class JobRequest {
@@ -76,7 +70,7 @@ class JobRequest {
     
     func updateOnAssignment(toDasher dasher: Dasher, atTime time: Timestamp) {
     /*
-         Caller: DasherHomeActivity ON(use clicks assign job button and job is assigned to a dasher)
+         Caller: DasherHomeActivity ON(user clicks assign job button and job is assigned to a dasher)
     */
         dasherUID = dasher.uid
         dasherName = "\(dasher.firstName) \(dasher.lastName)"
@@ -95,7 +89,7 @@ class JobRequest {
     */
         self.machineCost = machineCost
         self.numLoadsActual = numLoadsActual
-        self.amountPaid = self.estimatedTotalCost(forNumLoads: numLoadsActual)
+        self.amountPaid = self.estimatedTotalCost(forMachineCost: machineCost)
     }
     
     func udpateOnDasherCompletion(atTime time: Timestamp) {
@@ -167,7 +161,7 @@ class JobRequest {
     
     func toJobsInProgressData() -> [String: Any] {
     /*
-         Caller: JRF.writeJobREquest() on initial write
+         Caller: JRF.writeJobRequest() on initial write
     */
         let data: [String: Any] = [
             "JOB_ID": self.jobID,
@@ -225,10 +219,24 @@ class JobRequest {
         return Double(numLoads)*1.50*2.0 + 5.0 + 2.0
     }
     
+    func estimatedTotalCost(forMachineCost machineCost: Double) -> Double {
+        return machineCost + 7.0
+    }
+    
     func getDateTime() -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "d MMM y, HH:mm"
         return formatter.string(from: assignedTimestamp.dateValue())
+    }
+    
+    var dasherRatingContext: String {
+        let roundedRating = (round(dasherRating*100)/100)
+        return "\(roundedRating) out of 5"
+    }
+    
+    var customerRatingContext: String {
+        let roundedRating = (round(customerRating*100)/100)
+        return "\(roundedRating) out of 5"
     }
 }
 

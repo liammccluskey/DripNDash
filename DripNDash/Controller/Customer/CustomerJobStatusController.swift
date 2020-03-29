@@ -152,7 +152,7 @@ class CustomerJobStatusController: UIViewController {
     func configureUI(){
         // Job Information Portion
         dasherNameLabel = configureJobInfoLabel(keyLabel: "Dasher Name", valueLabel: jobRequest.dasherName)
-        dasherRatingLabel = configureJobInfoLabel(keyLabel: "Dasher Rating", valueLabel: String(jobRequest.dasherRating))
+        dasherRatingLabel = configureJobInfoLabel(keyLabel: "Dasher Rating", valueLabel: String(jobRequest.dasherRatingContext))
         estimatedCostLabel = configureJobInfoLabel(keyLabel: "Estimated Cost ($)", valueLabel: String(jobRequest.estimatedTotalCost(forNumLoads: jobRequest.numLoadsEstimate)))
         estimatedNumLoadsLabel = configureJobInfoLabel(keyLabel: "Estimated Number of Loads", valueLabel: String(jobRequest.numLoadsEstimate))
         instructionsLabel = configureJobInfoLabel(keyLabel: "Your Instructions", valueLabel: jobRequest.customerInstructions)
@@ -283,7 +283,6 @@ class CustomerJobStatusController: UIViewController {
         label.numberOfLines = 0
         label.font = .systemFont(ofSize: 18, weight: .semibold)
         label.backgroundColor = .clear
-        //label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }
     
@@ -394,7 +393,6 @@ class CustomerJobStatusController: UIViewController {
         
         navigationController?.popViewController(animated: true)
     }
-    
     
     // MARK: - Alerts
     
