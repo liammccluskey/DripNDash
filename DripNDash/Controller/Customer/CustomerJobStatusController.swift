@@ -152,7 +152,7 @@ class CustomerJobStatusController: UIViewController {
     func configureUI(){
         // Job Information Portion
         dasherNameLabel = configureJobInfoLabel(keyLabel: "Dasher Name", valueLabel: jobRequest.dasherName)
-        dasherRatingLabel = configureJobInfoLabel(keyLabel: "Dasher Rating", valueLabel: String(jobRequest.dasherRatingContext))
+        dasherRatingLabel = configureJobInfoLabel(keyLabel: "Dasher Rating", valueLabel: jobRequest.dasherRatingContext)
         estimatedCostLabel = configureJobInfoLabel(keyLabel: "Estimated Cost ($)", valueLabel: String(jobRequest.estimatedTotalCost(forNumLoads: jobRequest.numLoadsEstimate)))
         estimatedNumLoadsLabel = configureJobInfoLabel(keyLabel: "Estimated Number of Loads", valueLabel: String(jobRequest.numLoadsEstimate))
         instructionsLabel = configureJobInfoLabel(keyLabel: "Your Instructions", valueLabel: jobRequest.customerInstructions)
@@ -333,7 +333,7 @@ class CustomerJobStatusController: UIViewController {
     }
     
     func reloadJobInfoStackView() {
-        dasherRatingLabel.text? = "Dasher Rating: \(jobRequest.dasherRating!)"
+        dasherRatingLabel.text? = "Dasher Rating: \(jobRequest.dasherRatingContext)"
         dasherNameLabel.text? = "Dasher Name: \(jobRequest.dasherName!)"
     }
     

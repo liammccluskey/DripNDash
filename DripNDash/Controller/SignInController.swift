@@ -109,6 +109,8 @@ class SignInController: UIViewController {
     // MARK: - Config
     
     func configureUI() {
+        //configureNavigationBar()
+        
         logInView.addSubview(emailField)
         logInView.addSubview(passwordField)
         logInView.addSubview(logInButton)
@@ -160,7 +162,8 @@ class SignInController: UIViewController {
     }
     
     func configureNavigationBar() {
-        navigationController?.navigationBar.isHidden = true
+        //navigationController?.navigationBar.isHidden = true
+        navigationController?.navigationBar.barTintColor = UIColor.init(red: 135/255, green: 206/255, blue: 235/255, alpha: 1)
     }
     
     // MARK: - Selectors
