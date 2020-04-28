@@ -50,7 +50,30 @@ class JobRequestFirestore {
         }
     }
     
-    // MARK: Job Request cancellations
+    
+    func writeJobRequest(jobRequest: JobRequest, availableToDasherUID uid: String) {
+        /*
+         Writes the customer's job request only to JIP collection and notfies dasher collection of specific request
+         */
+        
+        let inProgressDocData = jobRequest.toJobsInProgressData()
+        let inProgressDocRef = db.collection("jobsInProgress")
+            .document(jobRequest.jobID)
+        
+        let dasherRef = db.collection("dashers")
+            .document(uid)
+        
+        let batch = db.batch()
+        batch.setData(inProgressDocData, forDocument: inProgressDocRef)
+        batch.updateData(["requestsPendingAccept": FieldValue.arrayUnion([jobRequest.jobID])], forDocument: dasherRef)
+        batch.commit { (error) in
+            if let error = error {
+                print("Error occured submitting job request: \(error)")
+                // TODO: HANDLE_ERROR
+            }
+        }
+        
+    }
     
     func deleteJobRequest(jobRequest: JobRequest) {
     /*
@@ -200,6 +223,24 @@ class JobRequestFirestore {
         }
     }
     
+    func getInProgressJobRequest(jobID: String) {
+        let docRef = db.collection("jobsInProgress")
+            .document(jobID)
+        docRef.getDocument { (document, error) in
+            if let document = document {
+                let documentData = document.data()!
+                let jobRequest = JobRequest(fromDocData: documentData)
+                
+                self.delegate?.sendAcceptedJobRequest(jobRequest: jobRequest)
+            } else {
+                // TODO: HANDLE_ERROR
+                guard let error = error else {return}
+                print("Error occured fetching job reqest document: \(error)")
+                
+            }
+        }
+    }
+    
     private func updateJobRequest(jobRequest: JobRequest, fields: [AnyHashable: Any]) {
         let inProgressDocRef = db.collection("jobsInProgress")
             .document(jobRequest.jobID)
@@ -262,6 +303,22 @@ class JobRequestFirestore {
         }) { (object, error) in
             if let error = error {
                 print("JobRequestFirestore.getCompletedJobs() Error: Transaction failed with \(error)")
+            }
+        }
+    }
+    
+    // MARK: - Test
+    
+    func updateOnDasherReject(jobID: String) {
+        // set wasCancelled = true for JIP colelction jobID document when dasher rejects customers specific requesrt
+        let inProgressDocRef = db.collection("jobsInProgress")
+            .document(jobID)
+        let fields: [AnyHashable: Any] = [
+            "WAS_REJECTED": true
+        ]
+        inProgressDocRef.updateData(fields) { (error) in
+            if let error = error {
+                print("JobRequestFirestore. Error: \(error)")
             }
         }
     }

@@ -64,6 +64,13 @@
 			remoteGlobalIDString = 7C4394E923F6F8C700793064;
 			remoteInfo = DripNDash;
 		};
+		7CB952312436A4DF009FA576 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7C4394E223F6F8C700793064 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7C4394E923F6F8C700793064;
+			remoteInfo = DripNDash;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -110,6 +117,7 @@
 		7C65A97C242CEB4900287092 /* DasherJobHistoryController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DasherJobHistoryController.swift; sourceTree = "<group>"; };
 		7C65A980242CEFAE00287092 /* JobHistoryTableController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobHistoryTableController.swift; sourceTree = "<group>"; };
 		7C700BD1240F0BA3001D6287 /* DasherJobNotificationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DasherJobNotificationController.swift; sourceTree = "<group>"; };
+		7CB9522C2436A4DF009FA576 /* JobRequestFirestoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JobRequestFirestoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CD240B523F9DBA300F9311A /* CustomerJobStatusController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerJobStatusController.swift; sourceTree = "<group>"; };
 		7CD240B723F9DC5000F9311A /* CustomerJobHistoryController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerJobHistoryController.swift; sourceTree = "<group>"; };
 		7CD240B923FC84C100F9311A /* CustomerJobsTableController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerJobsTableController.swift; sourceTree = "<group>"; };
@@ -143,6 +151,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				B1254F75AE2863E773168E7C /* Pods_DripNDash_DripNDashUITests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7CB952292436A4DF009FA576 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -200,6 +215,7 @@
 				7C4394EA23F6F8C700793064 /* DripNDash.app */,
 				7C4394FE23F6F8CC00793064 /* DripNDashTests.xctest */,
 				7C43950923F6F8CC00793064 /* DripNDashUITests.xctest */,
+				7CB9522C2436A4DF009FA576 /* JobRequestFirestoreTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -372,6 +388,24 @@
 			productReference = 7C43950923F6F8CC00793064 /* DripNDashUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		7CB9522B2436A4DF009FA576 /* JobRequestFirestoreTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7CB952352436A4DF009FA576 /* Build configuration list for PBXNativeTarget "JobRequestFirestoreTests" */;
+			buildPhases = (
+				7CB952282436A4DF009FA576 /* Sources */,
+				7CB952292436A4DF009FA576 /* Frameworks */,
+				7CB9522A2436A4DF009FA576 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7CB952322436A4DF009FA576 /* PBXTargetDependency */,
+			);
+			name = JobRequestFirestoreTests;
+			productName = JobRequestFirestoreTests;
+			productReference = 7CB9522C2436A4DF009FA576 /* JobRequestFirestoreTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -393,6 +427,10 @@
 						CreatedOnToolsVersion = 10.1;
 						TestTargetID = 7C4394E923F6F8C700793064;
 					};
+					7CB9522B2436A4DF009FA576 = {
+						CreatedOnToolsVersion = 10.1;
+						TestTargetID = 7C4394E923F6F8C700793064;
+					};
 				};
 			};
 			buildConfigurationList = 7C4394E523F6F8C700793064 /* Build configuration list for PBXProject "DripNDash" */;
@@ -411,6 +449,7 @@
 				7C4394E923F6F8C700793064 /* DripNDash */,
 				7C4394FD23F6F8CC00793064 /* DripNDashTests */,
 				7C43950823F6F8CC00793064 /* DripNDashUITests */,
+				7CB9522B2436A4DF009FA576 /* JobRequestFirestoreTests */,
 			);
 		};
 /* End PBXProject section */
@@ -435,6 +474,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		7C43950723F6F8CC00793064 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7CB9522A2436A4DF009FA576 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -601,6 +647,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		7CB952282436A4DF009FA576 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -613,6 +666,11 @@
 			isa = PBXTargetDependency;
 			target = 7C4394E923F6F8C700793064 /* DripNDash */;
 			targetProxy = 7C43950A23F6F8CC00793064 /* PBXContainerItemProxy */;
+		};
+		7CB952322436A4DF009FA576 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7C4394E923F6F8C700793064 /* DripNDash */;
+			targetProxy = 7CB952312436A4DF009FA576 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -876,6 +934,46 @@
 			};
 			name = Release;
 		};
+		7CB952332436A4DF009FA576 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = VK5RMS38VH;
+				INFOPLIST_FILE = JobRequestFirestoreTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = kingliam.JobRequestFirestoreTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DripNDash.app/DripNDash";
+			};
+			name = Debug;
+		};
+		7CB952342436A4DF009FA576 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = VK5RMS38VH;
+				INFOPLIST_FILE = JobRequestFirestoreTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = kingliam.JobRequestFirestoreTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DripNDash.app/DripNDash";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -911,6 +1009,15 @@
 			buildConfigurations = (
 				7C43951923F6F8CC00793064 /* Debug */,
 				7C43951A23F6F8CC00793064 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7CB952352436A4DF009FA576 /* Build configuration list for PBXNativeTarget "JobRequestFirestoreTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7CB952332436A4DF009FA576 /* Debug */,
+				7CB952342436A4DF009FA576 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

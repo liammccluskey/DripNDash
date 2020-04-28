@@ -13,6 +13,18 @@ class DasherHomeController: UIViewController {
     
     // MARK: - Properties
     
+    let segmentedControl: UISegmentedControl = {
+        let sc = UISegmentedControl(items: ["Accepting Requests", "Not Accepting Requests"])
+        //sc.isEnabled = false
+        sc.selectedSegmentIndex = 1
+        sc.layer.cornerRadius = 5
+        sc.backgroundColor = .white
+        sc.tintColor = .black
+        sc.addTarget(self, action: #selector(segmentAction), for: .valueChanged)
+        sc.translatesAutoresizingMaskIntoConstraints = false
+        return sc
+    }()
+    
     var dasher: Dasher!
     let df = DasherFirestore()
     let jrf = JobRequestFirestore()
@@ -87,6 +99,8 @@ class DasherHomeController: UIViewController {
     func configureUI() {
         configureNavigationBar()
         
+        view.addSubview(segmentedControl)
+        
         // Status View Portion
         statusView.addSubview(statusHeader)
         statusView.addSubview(statusDivider)
@@ -102,7 +116,10 @@ class DasherHomeController: UIViewController {
     func setUpAutoLayout() {
         let borderConstant: CGFloat = 10
         
-        statusView.topAnchor.constraint(equalTo: view.topAnchor, constant: borderConstant).isActive = true
+        segmentedControl.topAnchor.constraint(equalTo: view.topAnchor, constant: 10).isActive = true
+        segmentedControl.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        
+        statusView.topAnchor.constraint(equalTo: segmentedControl.bottomAnchor, constant: borderConstant).isActive = true
         statusView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -borderConstant).isActive = true
         statusView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -borderConstant).isActive = true
         statusView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: borderConstant).isActive = true
@@ -159,6 +176,29 @@ class DasherHomeController: UIViewController {
     @objc func historyAction() {
         requestActionHelper()
     }
+    
+    @objc func segmentAction() {
+        let selectedIndex = segmentedControl.selectedSegmentIndex
+        let isAvailable = selectedIndex == 0 ? true : false
+        df.updateDasherAvailability(forDasher: dasher, isAvailable: isAvailable)
+    }
+    
+    // MARK: - Alerts
+    
+    func showCustomerRequestNotification(forJobID jobID: String) {
+        let alert = UIAlertController(title: "Accept this Request?", message: "A customer has requested specifically for you. Would you like to accept the customer's request?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Accept", style: .default, handler: { (action) in
+           // get job and add it to table
+            self.jrf.getInProgressJobRequest(jobID: jobID)
+        }))
+        alert.addAction(UIAlertAction(title: "Reject", style: .destructive, handler: { (action) in
+            // delete job from dashers collection and dleete from JIP
+            self.jrf.updateOnDasherReject(jobID: jobID)
+        }))
+
+        
+        present(alert, animated: true)
+    }
 }
 
 extension DasherHomeController: JobRequestFirestoreDelegate {
@@ -171,14 +211,29 @@ extension DasherHomeController: JobRequestFirestoreDelegate {
     }
     func sendCompletedJobs(jobRequests: [JobRequest]) {
     }
+    func sendAcceptedJobRequest(jobRequest: JobRequest) {
+        jobRequest.updateOnAssignment(toDasher: dasher, atTime: Timestamp(date: Date()))
+        jrf.updateOnAssignmentAccept(jobRequest: jobRequest)
+        
+        tableController.inProgressJobs.append(jobRequest)
+        tableController.addListenerToJobRequest(jobRequest: jobRequest)
+        tableController.tableView.reloadData()
+    }
 }
 
 extension DasherHomeController: DasherFirestoreDelegate {
     func sendDasher(dasher: Dasher?) {
         if let dasher = dasher {
             self.dasher = dasher
+            segmentedControl.isEnabled = true
+            
         } else {
             print("DasherHomeController.DasherFirestoreDelegate.sendDasher(): dasher is nil")
+        }
+    }
+    func sendRequestsPendingAccept(jobIDs: [String]) {
+        for jobID in jobIDs {
+            showCustomerRequestNotification(forJobID: jobID)
         }
     }
 }

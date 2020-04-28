@@ -314,12 +314,19 @@ class CustomerJobStatusController: UIViewController {
                 self.jobRequest = JobRequest.init(fromDocData: data)
 
                 // reload page data
-                self.updateStatusStackView(atStage: self.jobRequest.currentStage)
-                self.reloadJobInfoStackView()
+                DispatchQueue.main.async {
+                    self.updateStatusStackView(atStage: self.jobRequest.currentStage)
+                    self.reloadJobInfoStackView()
+                }
                 
                 if self.jobRequest.currentStage == 9 {
                     self.didCompleteJob()
                     self.showJobCompleteAlert()
+                }
+                
+                // check if job was rejected by dasher: in case of requested specific dasher
+                if self.jobRequest.wasRejected {
+                    self.showJobRejectionAlert()
                 }
         }
     }
@@ -394,6 +401,13 @@ class CustomerJobStatusController: UIViewController {
         navigationController?.popViewController(animated: true)
     }
     
+    func didReceiveJobRejection() {
+        jrf.deleteJobRequest(jobRequest: jobRequest)
+        delegate?.didComplete(jobRequest: jobRequest)
+        
+        navigationController?.popViewController(animated: true)
+    }
+    
     // MARK: - Alerts
     
     func showConfirmCancelAlert() {
@@ -431,6 +445,14 @@ class CustomerJobStatusController: UIViewController {
         }))
         
         self.present(alert, animated: true)
+    }
+    
+    func showJobRejectionAlert() {
+        let alert = UIAlertController(title: "Request Rejected by Dasher", message: "The dasher you requested has rejected this request.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: { (action) in
+            self.didReceiveJobRejection()
+        }))
+        present(alert, animated: true)
     }
 
     

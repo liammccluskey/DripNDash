@@ -73,6 +73,27 @@ class DasherFirestore {
         }
     }
     
+    func updateDasherAvailability(forDasher dasher: Dasher, isAvailable: Bool) {
+        let dasherDict: [String: Any] = [
+            "NAME": "\(dasher.firstName) \(dasher.lastName)",
+            "RATING": dasher.rating,
+            "UID": dasher.uid
+        ]
+        let docRef = db.collection("dorms")
+            .document(dasher.dorm)
+        if isAvailable {
+            docRef.updateData(["availableDashers": FieldValue.arrayUnion([dasherDict])]) { (error) in
+                guard let error = error else {return}
+                print("DasherFirestore.udpateDashervailability() error: \(error)")
+            }
+        } else {
+            docRef.updateData(["availableDashers": FieldValue.arrayRemove([dasherDict])]) { (error) in
+                guard let error = error else {return}
+                print("DasherFirestore.udpateDashervailability() error: \(error)")
+            }
+        }
+    }
+    
     // MARK: - Profile Updates
     
     func addCompletedJob(jobID: String, forDasherUID uid: String) {
@@ -140,6 +161,23 @@ class DasherFirestore {
             }
             let dasher = Dasher(fromDocData: data)
             self.delegate?.sendDasher(dasher: dasher)
+            
+            // check for specific requests
+            let requestIDs = data["requestsPendingAccept"] as! [String]
+            if requestIDs.count > 0 {
+                self.clearQueueAndNotify(dasherUID: uid, jobIDs: requestIDs)
+            }
+        }
+    }
+    
+    func clearQueueAndNotify(dasherUID uid: String, jobIDs: [String]) {
+        let docRef = dashersRef.document(uid)
+        docRef.updateData(["requestsPendingAccept": []]) { (error) in
+            if let error = error {
+                print(error)
+            } else {
+                self.delegate?.sendRequestsPendingAccept(jobIDs: jobIDs)
+            }
         }
     }
     

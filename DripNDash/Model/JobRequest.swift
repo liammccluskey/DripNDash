@@ -21,6 +21,7 @@ class JobRequest {
     let customerName: String
     let customerInstructions: String
     var wasCancelled: Bool = false
+    var wasRejected: Bool = false
     
     // MARK: - Properties Assigned on Dasher_Accept
     
@@ -122,6 +123,7 @@ class JobRequest {
         self.currentStage = 0
         
         self.wasCancelled = false
+        self.wasRejected = false
     }
     
     init(fromDocData docData: [String: Any]) {
@@ -152,6 +154,8 @@ class JobRequest {
         
         self.wasCancelled = docData["WAS_CANCELLED"] as? Bool ?? false
         
+        self.wasRejected = docData["WAS_REJECTED"] as? Bool ?? false
+        
         // only relevant to JR objs in jobsCompleted collection
         self.customerRating = docData["CUSTOMER_RATING"] as? Double ?? -1
         self.customerReview = docData["CUSTOMER_REVIEW"] as? String ?? ""
@@ -181,7 +185,8 @@ class JobRequest {
             "AMOUNT_PAID": -1,
             "NUM_LOADS_ACTUAL": -1,
             "COMPLETED_TIMESTAMP": "",
-            "WAS_CANCELLED": self.wasCancelled
+            "WAS_CANCELLED": self.wasCancelled,
+            "WAS_REJECTED": false
         ]
         return data
     }

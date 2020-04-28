@@ -9,6 +9,7 @@
 import UIKit
 import Firebase
 
+
 class JobHistoryTableController: UITableViewController {
     
     // MARK: - Properties
@@ -63,11 +64,17 @@ class JobHistoryTableController: UITableViewController {
 }
 
 extension JobHistoryTableController: JobRequestFirestoreDelegate {
+    func sendAcceptedJobRequest(jobRequest: JobRequest) {
+        
+    }
+    
     func sendJobRequest(jobRequest: JobRequest) {
     }
     
     func sendCompletedJobs(jobRequests: [JobRequest]) {
         self.completedJobs = jobRequests
-        self.tableView.reloadData()
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
     }
 }

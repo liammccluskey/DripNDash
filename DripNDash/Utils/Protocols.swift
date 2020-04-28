@@ -24,12 +24,14 @@ protocol CustomerFirestoreDelegate {
 
 protocol DasherFirestoreDelegate {
     func sendDasher(dasher: Dasher?)
+    func sendRequestsPendingAccept(jobIDs: [String])
 }
 
 protocol JobRequestFirestoreDelegate {
     func sendJobRequest(jobRequest: JobRequest)
     //func sendUpdatedJobRequest(jobRequest: JobRequest)
     func sendCompletedJobs(jobRequests: [JobRequest])
+    func sendAcceptedJobRequest(jobRequest: JobRequest)
 }
 
 protocol DasherJobNotificationDelegate {

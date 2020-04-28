@@ -45,7 +45,8 @@ class CustomerJobsTableController: UITableViewController {
         let jobRequest = inProgressJobs[indexPath.row]
         cell.textLabel?.text = jobRequest.currentStatus
         cell.detailTextLabel?.text = jobRequest.jobID
-        return cell    }
+        return cell
+    }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         delegate?.didSelectJob(jobRequest: inProgressJobs[indexPath.row])
