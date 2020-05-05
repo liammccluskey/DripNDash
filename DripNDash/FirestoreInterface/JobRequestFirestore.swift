@@ -69,7 +69,7 @@ class JobRequestFirestore {
         
         let batch = db.batch()
         batch.setData(inProgressDocData, forDocument: inProgressDocRef)
-        batch.updateData(["requestsPendingAccept": FieldValue.arrayUnion([jobRequest.jobID])], forDocument: dasherRef)
+        batch.updateData(["REQUESTS_PENDING_ACCEPT": FieldValue.arrayUnion([jobRequest.jobID])], forDocument: dasherRef)
         batch.commit { (error) in
             if let error = error {
                 print("Error occured submitting job request: \(error)")

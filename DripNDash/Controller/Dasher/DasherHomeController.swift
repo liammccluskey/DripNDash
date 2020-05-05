@@ -237,7 +237,6 @@ extension DasherHomeController: DasherFirestoreDelegate {
         if let dasher = dasher {
             self.dasher = dasher
             segmentedControl.isEnabled = true
-            
         } else {
             print("DasherHomeController.DasherFirestoreDelegate.sendDasher(): dasher is nil")
         }
