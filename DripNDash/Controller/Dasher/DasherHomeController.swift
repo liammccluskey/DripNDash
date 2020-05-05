@@ -13,7 +13,9 @@ class DasherHomeController: UIViewController {
     
     // MARK: - Properties
     
-    let segmentedControl: UISegmentedControl = {
+    var notificationLock = DispatchSemaphore(value: 1)
+    
+    lazy var segmentedControl: UISegmentedControl = {
         let sc = UISegmentedControl(items: ["Accepting Requests", "Not Accepting Requests"])
         //sc.isEnabled = false
         sc.selectedSegmentIndex = 1
@@ -58,7 +60,7 @@ class DasherHomeController: UIViewController {
     
     var tableController: DasherJobsTableController!
     
-    let requestButton: UIButton = {
+    lazy var requestButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Assign Me a New Job", for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 17, weight: .semibold)
@@ -151,7 +153,7 @@ class DasherHomeController: UIViewController {
     func configureNavigationBar() {
         navigationController?.navigationBar.isTranslucent = false
         navigationController?.navigationBar.barStyle = .default
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "ic_menu_white_3x"), style: .plain, target: self, action: #selector(historyAction))
+        //navigationItem.rightBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "ic_menu_white_3x"), style: .plain, target: self, action: #selector(historyAction))
         navigationItem.title = "Home"
     }
     
@@ -165,6 +167,8 @@ class DasherHomeController: UIViewController {
         }
     }
     
+    /*
+    
     func requestActionHelper() {
         if dasher != nil {
             jrf.getOldestJobRequest(availableToDasher: dasher)
@@ -176,6 +180,7 @@ class DasherHomeController: UIViewController {
     @objc func historyAction() {
         requestActionHelper()
     }
+ */
     
     @objc func segmentAction() {
         let selectedIndex = segmentedControl.selectedSegmentIndex
@@ -190,10 +195,12 @@ class DasherHomeController: UIViewController {
         alert.addAction(UIAlertAction(title: "Accept", style: .default, handler: { (action) in
            // get job and add it to table
             self.jrf.getInProgressJobRequest(jobID: jobID)
+            
         }))
         alert.addAction(UIAlertAction(title: "Reject", style: .destructive, handler: { (action) in
             // delete job from dashers collection and dleete from JIP
             self.jrf.updateOnDasherReject(jobID: jobID)
+            
         }))
 
         
