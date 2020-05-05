@@ -1,7 +1,5 @@
-# DripNDash
-
 Contributor: Liam McCluskey
-Date: 5/5/2020
+Date: 5/5/2020 
 **********	Project Files	**********
 
 	/DripNDash
@@ -64,7 +62,8 @@ Date: 5/5/2020
 			- Step 3. Click the run button in the top left corner
 			- Step 4. Wait for project to build successfully. The iPhone 7 Plus simulator should now show the DripNDash login page
 			- Step 5. Go back to Xcode and change the simulator to the iPhone 8 Plus simulator -> This phone is also preferred as simulator seems to run fastest on this phone 
-			- Step 6. Click the run button on the top left corner
+			- Step 6. Click the run button on the top left corner.
+				- Step 6.1. Xcode will prompt you with a "Stop DripNDash?" message. Click stop and proceed to step 7
 			- Step 7. Wait for app to build on iPhone 8 Plus, then click the DripNDash application icon on the iPhone 7 Plus simulator
 			- Complete?: You should now see the login page one both iPhone simulators
 
