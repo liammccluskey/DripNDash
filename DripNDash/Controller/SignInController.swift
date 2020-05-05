@@ -2,7 +2,7 @@
 //  signinController.swift
 //  QuikPark
 //
-//  Created by Marty McCluskey on 12/31/19.
+//  Created by Liam McCluskey on 12/31/19.
 //  Copyright © 2019 Liam McCluskey. All rights reserved.
 //
 

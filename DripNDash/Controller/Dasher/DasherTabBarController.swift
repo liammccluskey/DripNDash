@@ -2,7 +2,7 @@
 //  DasherTabBarController.swift
 //  DripNDash
 //
-//  Created by Marty McCluskey on 2/15/20.
+//  Created by Liam McCluskey on 2/15/20.
 //  Copyright © 2020 Liam McCluskey. All rights reserved.
 //
 

@@ -2,7 +2,7 @@
 //  CJSC_StageController.swift
 //  DripNDash
 //
-//  Created by Marty McCluskey on 3/12/20.
+//  Created by Liam McCluskey on 3/12/20.
 //  Copyright © 2020 Liam McCluskey. All rights reserved.
 //
 
