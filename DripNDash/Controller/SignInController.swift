@@ -42,9 +42,6 @@ class SignInController: UIViewController {
     
     private let emailField: UITextField = {
         let textField = UITextField()
-        // LBFTP
-        textField.text = "lmm459@rutgers.edu"
-        //
         textField.autocapitalizationType = .none
         textField.placeholder = "Email"
         textField.backgroundColor = .white
@@ -55,9 +52,6 @@ class SignInController: UIViewController {
     
     private let passwordField: UITextField = {
         let textField = UITextField()
-        // LBFTP
-        textField.text = "password"
-        //
         textField.autocapitalizationType = .none
         textField.placeholder = "Password"
         textField.backgroundColor = .white
