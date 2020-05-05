@@ -6,13 +6,9 @@
 //  Copyright © 2020 Liam McCluskey. All rights reserved.
 //
 
-/*  TODO
-    - add functionality for item in table selection
-    - make custom table view cells
-    - update self.inProgressJobs on read from database or listenerDidChange
- 
- 
-*/
+// written by: Liam McCluskey
+// tested by: Liam McCluskey
+// debugged by: Liam McCluskey
 
 import UIKit
 import Firebase

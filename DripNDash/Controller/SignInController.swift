@@ -6,10 +6,14 @@
 //  Copyright © 2019 Liam McCluskey. All rights reserved.
 //
 
+// written by: Liam McCluskey
+// tested by: Liam McCluskey
+// debugged by: Liam McCluskey
+
 import UIKit
 import Firebase
 
-// LoginView 2
+
 class SignInController: UIViewController {
     
     // MARK: - Properties
