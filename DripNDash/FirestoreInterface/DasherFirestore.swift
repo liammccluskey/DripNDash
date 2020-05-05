@@ -43,7 +43,8 @@ class DasherFirestore {
             "COMPLETED_JOBS": dasher.completedJobs,
             "NUM_COMPLETED_JOBS": dasher.numCompletedJobs,
             "RATING": dasher.rating,
-            "REGISTER_TIMESTAMP": dasher.registerTimestamp
+            "REGISTER_TIMESTAMP": dasher.registerTimestamp,
+            "REQUESTS_PENDING_ACCEPT": []
         ]) { (error) in
             if let error = error {
                 // TODO: HANDLE_ERROR
@@ -167,7 +168,7 @@ class DasherFirestore {
             self.delegate?.sendDasher(dasher: dasher)
             
             // check for specific requests
-            let requestIDs = data["requestsPendingAccept"] as! [String]
+            let requestIDs = data["REQUESTS_PENDING_ACCEPT"] as! [String]
             if requestIDs.count > 0 {
                 self.clearQueueAndNotify(dasherUID: uid, jobIDs: requestIDs)
             }
@@ -176,7 +177,7 @@ class DasherFirestore {
     
     func clearQueueAndNotify(dasherUID uid: String, jobIDs: [String]) {
         let docRef = dashersRef.document(uid)
-        docRef.updateData(["requestsPendingAccept": []]) { (error) in
+        docRef.updateData(["REQUESTS_PENDING_ACCEPT": []]) { (error) in
             if let error = error {
                 print(error)
             } else {

@@ -21,7 +21,7 @@ class DasherHomeController: UIViewController {
     
     lazy var segmentedControl: UISegmentedControl = {
         let sc = UISegmentedControl(items: ["Accepting Requests", "Not Accepting Requests"])
-        //sc.isEnabled = false
+        sc.isEnabled = false
         sc.selectedSegmentIndex = 1
         sc.layer.cornerRadius = 5
         sc.backgroundColor = .white
